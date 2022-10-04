@@ -28,12 +28,13 @@ const SignUp = (props) => {
       return;
     }
 
-    fetch(Config.url.API_URL + "/auth/login", {
+    fetch(Config.url.API_URL + "/auth/signup", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
+        name: nameInput.current.value,
         email: emailInput.current.value,
         password: passwordInput.current.value,
       }),
@@ -42,16 +43,11 @@ const SignUp = (props) => {
         return res.json();
       })
       .then((result) => {
-        if (result.token) {
-          localStorage.setItem("token", result.token);
-          alert("登入成功");
-          navigate("/order");
-        } else {
-          alert(result.message);
-        }
+        alert(result.message);
+        navigate("/login");
       })
       .catch((err) => {
-        axiosErrorHandler(err)
+        axiosErrorHandler(err);
         console.log(err);
       });
   };
