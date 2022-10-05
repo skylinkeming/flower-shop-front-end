@@ -59,6 +59,7 @@ const ScrollDialog = (props) => {
           }}
           dividers={scroll === "paper"}
           onScroll={(e) => {
+            console.log("dialog content scroll event");
             const bottom =
               e.target.scrollHeight - e.target.scrollTop ===
               e.target.clientHeight;

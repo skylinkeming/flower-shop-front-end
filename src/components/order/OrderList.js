@@ -253,7 +253,7 @@ const OrderListWrap = styled.div`
     margin-top: 50px;
     min-height: 200px;
     max-height: 800px;
-    overflow-x: scroll;
+    overflow-x: auto;
     border-radius: 10px;
     box-shadow: inset 0 -2px 0 0 #cdcde6, inset 0 0 1px 1px #fff,
       0 1px 2px 1px rgba(30, 35, 90, 0.4);
@@ -279,7 +279,7 @@ const OrderListWrap = styled.div`
     }
     .tableBody {
       height: calc(100% - 192px);
-      overflow: scroll;
+      overflow: auto;
       .noResult {
         text-align: center;
         padding-top: 100px;
@@ -307,6 +307,7 @@ const OrderListWrap = styled.div`
     }
     .column.date {
       width: 100px;
+      white-space:nowrap;
       box-sizing: border-box;
     }
     .column.time {

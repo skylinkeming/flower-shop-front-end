@@ -224,6 +224,7 @@ const ClientListWrap = styled.div`
     box-shadow: inset 0 -2px 0 0 #cdcde6, inset 0 0 1px 1px #fff,
       0 1px 2px 1px rgba(30, 35, 90, 0.4);
     font-size: 18px;
+    overflow:hidden;
     .functionHeader {
       padding: 20px 0 0 20px;
     }
@@ -241,7 +242,7 @@ const ClientListWrap = styled.div`
     }
     .tableBody {
       height: 500px;
-      overflow: scroll;
+      overflow: auto;
       .clientList {
         min-height: 510px;
         .noData {

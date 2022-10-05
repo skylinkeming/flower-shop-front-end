@@ -1,5 +1,5 @@
 import "./App.css";
-import { Fragment } from "react";
+import { Fragment, useEffect } from "react";
 import styled from "styled-components";
 import { Routes, Route } from "react-router-dom";
 import OrderList from "./components/order/OrderList";
@@ -13,6 +13,9 @@ import SignUp from "./components/auth/SignUp";
 import AddOrEditClient from "./components/client/AddOrEditClient";
 
 function App() {
+  useEffect(()=>{
+    document.title = '花店訂單管理系統';
+  },[])
   return (
     <MainPageWrap>
       <Header />

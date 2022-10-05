@@ -71,6 +71,7 @@ const SearchInputWrap = styled.div`
     cursor: pointer;
   }
   span.search.btn {
+    white-space: nowrap;
     margin-right: 5px;
   }
 `;
