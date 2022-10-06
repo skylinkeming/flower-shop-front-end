@@ -65,14 +65,7 @@ const ClientList = (props) => {
           })
         );
       })
-      .catch((err) => {
-        axiosErrorHandler(err);
-        // if (err.response.data.message === "jwt expired") {
-        //   alert("身份驗證過期，請重新登入");
-        //   sessionStorage.setItem("beforeLoginUrl", window.location.href);
-        //   navigate("/login");
-        // }
-      });
+      .catch(axiosErrorHandler);
   };
 
   const clearSelect = () => {

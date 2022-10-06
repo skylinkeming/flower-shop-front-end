@@ -69,7 +69,7 @@ const OrderList = (props) => {
         // navigate("/order/" + params.orderId);
       })
       .catch((err) => {
-        axiosErrorHandler(err)
+        axiosErrorHandler(err);
       });
   };
 
@@ -96,7 +96,7 @@ const OrderList = (props) => {
         );
       })
       .catch((err) => {
-        axiosErrorHandler(err)
+        axiosErrorHandler(err);
       });
   };
 
@@ -141,6 +141,25 @@ const OrderList = (props) => {
 
   return (
     <OrderListWrap>
+      <div className="pageTop">
+        <div className="pageTitle">訂單資料</div>
+        <select
+          className="batchAction"
+          value={batchActionType}
+          onChange={(e) => {
+            handleBatchAction(e.target.value);
+          }}
+        >
+          <option disabled={true} value="">
+            --選擇編輯行動--
+          </option>
+          <option value="1">批次改為已付款</option>
+          <option value="2">批次改為未付款</option>
+          <option value="3">批次改為已送貨</option>
+          <option value="4">批次改為未送貨</option>
+          <option value="5">批次刪除</option>
+        </select>
+      </div>
       <div className="table">
         <div className="functionHeader">
           <SearchInput
@@ -162,22 +181,6 @@ const OrderList = (props) => {
               );
             }}
           />
-          <select
-            className="batchAction"
-            value={batchActionType}
-            onChange={(e) => {
-              handleBatchAction(e.target.value);
-            }}
-          >
-            <option disabled={true} value="">
-              --選擇編輯行動--
-            </option>
-            <option value="1">批次改為已付款</option>
-            <option value="2">批次改為未付款</option>
-            <option value="3">批次改為已送貨</option>
-            <option value="4">批次改為未送貨</option>
-            <option value="5">批次刪除</option>
-          </select>
         </div>
         <div className="tableHeader">
           <span className="column checkbox">
@@ -244,13 +247,36 @@ const OrderList = (props) => {
 };
 
 const OrderListWrap = styled.div`
-  display: flex;
-  justify-content: center;
+  text-align: center;
   background-color: #e7ebf0;
-  height: 100vh;
+  height: 100%;
+  width: 100%;
+  .pageTop {
+    display: inline-block;
+    width: 1100px;
+    margin-top: 30px;
+    position: relative;
+    text-align: left;
+    .pageTitle {
+      display: inline-block;
+      font-size: 30px;
+    }
+    .batchAction {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      font-size: 16px;
+      padding: 0;
+      height: 33px;
+      padding: 0 10px;
+      border-radius: 5px;
+      border: 1px solid rgba(224, 224, 224, 1);
+    }
+  }
   .table {
+    display: inline-block;
     background-color: white;
-    margin-top: 50px;
+    margin-top: 20px;
     min-height: 200px;
     max-height: 800px;
     overflow-x: auto;
@@ -259,17 +285,9 @@ const OrderListWrap = styled.div`
       0 1px 2px 1px rgba(30, 35, 90, 0.4);
     overflow-y: hidden;
     .functionHeader {
-      padding: 20px 10px;
+      padding: 20px 10px 0px 20px;
       display: flex;
       justify-content: space-between;
-      .batchAction {
-        font-size: 16px;
-        padding: 0;
-        height: 33px;
-        padding: 0 10px;
-        border-radius: 5px;
-        border: 1px solid rgba(224, 224, 224, 1);
-      }
     }
     .tableHeader {
       border-bottom: 2px solid rgba(224, 224, 224, 1);
@@ -307,7 +325,7 @@ const OrderListWrap = styled.div`
     }
     .column.date {
       width: 100px;
-      white-space:nowrap;
+      white-space: nowrap;
       box-sizing: border-box;
     }
     .column.time {

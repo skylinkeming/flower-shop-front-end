@@ -61,8 +61,11 @@ const ScrollDialog = (props) => {
           onScroll={(e) => {
             console.log("dialog content scroll event");
             const bottom =
-              e.target.scrollHeight - e.target.scrollTop ===
-              e.target.clientHeight;
+              Math.abs(
+                e.target.scrollHeight -
+                  e.target.scrollTop -
+                  e.target.clientHeight
+              ) <= 5;
 
             if (bottom) {
               if (props.handleScrollToBottom) {

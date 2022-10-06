@@ -34,10 +34,17 @@ export const fetchOrders = createAsyncThunk(
   "client/fetchOrders",
   async (payload, thunkAPI) => {
     try {
+      let queryString= "";
+
+      if(payload.searchKey){
+        queryString = "&searchKey=" + payload.searchKey
+      }
+      if(payload.startDate && payload.endDate){
+        queryString = `&startDate=${payload.startDate}&endDate=${payload.endDate}`
+      }
+
       const response = await axios.get(
-        Config.url.API_URL + "/feed/orders?page=" +
-          payload.page +
-          (payload.searchKey ? "&searchKey=" + payload.searchKey : "")
+        Config.url.API_URL + "/feed/orders?page=" + payload.page + queryString
       );
       return response;
     } catch (e) {
@@ -45,6 +52,7 @@ export const fetchOrders = createAsyncThunk(
     }
   }
 );
+
 
 export const orderSlice = createSlice({
   name: "order",
