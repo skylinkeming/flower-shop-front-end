@@ -11,8 +11,9 @@ import { useState } from "react";
 import { useEffect } from "react";
 
 const MUIDatePicker = (props) => {
-  const [value, setValue] = useState(dayjs(new Date()));
-
+  const [value, setValue] = useState(
+    props.date ? dayjs(props.date) : dayjs(new Date())
+  );
   useEffect(() => {
     props.onChange(value.format("YYYY-MM-DD HH:mm"));
   }, [value]);

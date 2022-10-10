@@ -8,9 +8,11 @@ import { useNavigate } from "react-router-dom";
 import { updateEditOrder } from "../../features/order/orderSlice";
 import { Config } from "../../util/Constants";
 import { axiosErrorHandler } from "../../util/axiosErrorHandler";
+import ClientRevenue from "../chart/ClientRevenue";
 
 const ClientProfile = () => {
   const [clientData, setClientData] = useState("");
+  const [mode, setMode] = useState("order");
   let dispatch = useDispatch();
   let params = useParams();
   const navigate = useNavigate();
@@ -75,7 +77,7 @@ const ClientProfile = () => {
                 dispatch(updateEditOrder({ clientName: clientData.name }));
                 dispatch(updateEditOrder({ address: clientData.address }));
                 dispatch(updateEditOrder({ phone: clientData.phone }));
-                navigate("/order/add-order");
+                navigate("/order/add-order?clientId=" + clientData._id);
               }}
             >
               新增訂單+
@@ -104,13 +106,28 @@ const ClientProfile = () => {
         </div>
         <div className="otherInfo">
           <div className="tab">
-            <span className="current">歷史訂單</span>
-            <span>統計數據</span>
+            <span
+              className={mode === "order" && "current"}
+              onClick={() => {
+                setMode("order");
+              }}
+            >
+              歷史訂單
+            </span>
+            <span
+              className={mode === "chart" && "current"}
+              onClick={() => {
+                setMode("chart");
+              }}
+            >
+              統計數據
+            </span>
           </div>
           <div className="orderList">
-            {clientData.orders && (
+            {mode === "order" && clientData.orders && (
               <ClientOrderList orderList={clientData.orders} />
             )}
+            {mode === "chart" && <ClientRevenue client={clientData}/>}
           </div>
         </div>
       </div>
@@ -131,6 +148,7 @@ const ClientProfileＷrap = styled.div`
     padding: 20px;
     .clientInfo {
       width: 360px;
+      min-height: 600px;
       padding-top: 30px;
       text-align: center;
       margin-right: 20px;

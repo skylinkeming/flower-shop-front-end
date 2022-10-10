@@ -28,7 +28,7 @@ const OrderItem = (props) => {
   const timeStr =
     dateObj.getHours() +
     ":" +
-    (dateObj.getMinutes() == 0 ? "00" : dateObj.getMinutes());
+    (dateObj.getMinutes() === 0 ? "00" : dateObj.getMinutes());
 
   const renderProductList = () => {
     const finalIndex = products.length - 1;

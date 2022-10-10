@@ -112,9 +112,7 @@ const AddOrEditClient = (props) => {
       .then((res) => {
         navigate("/client");
       })
-      .catch((err) => {
-        axiosErrorHandler(err);
-      });
+      .catch(axiosErrorHandler);
   };
 
   const uploadImage = async () => {

@@ -18,6 +18,7 @@ import {
 } from "../../features/order/orderSlice";
 import { Config } from "../../util/Constants";
 import { axiosErrorHandler } from "../../util/axiosErrorHandler";
+import { useLocation } from "react-router-dom";
 
 const AddOrder = (props) => {
   const editOrder = useSelector((state) => {
@@ -26,19 +27,19 @@ const AddOrder = (props) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [isEdit, setIsEdit] = useState(false);
-
-  let params = useParams();
+  const location = useLocation();
+  const params = useParams();
 
   useEffect(() => {
-    if (!window.location.href.includes("/add-order")) {
-      setIsEdit(true);
-    } else {
+    if (window.location.href.includes("/add-order")) {
       setIsEdit(false);
-      if (editOrder._id) {
+      if (editOrder._id && !window.location.href.includes("clientId")) {
         dispatch(clearEditOrder());
       }
+    } else {
+      setIsEdit(true);
     }
-  }, [editOrder]);
+  }, [location]);
 
   const checkInfo = () => {
     let isProductOK = true;
@@ -122,7 +123,7 @@ const AddOrder = (props) => {
   const updateOrder = () => {
     axios({
       method: "PUT",
-      url: Config.url.API_URL +"/feed/order/" + params.orderId,
+      url: Config.url.API_URL + "/feed/order/" + params.orderId,
       data: getRequestData(),
       headers: {
         "Content-Type": "application/json",
@@ -134,33 +135,10 @@ const AddOrder = (props) => {
         navigate("/order/" + params.orderId);
       })
       .catch((err) => {
-        axiosErrorHandler(err,()=>{ navigate('/login') })
+        axiosErrorHandler(err, () => {
+          navigate("/login");
+        });
       });
-
-    // axios
-    //   .put(
-    //     "http://localhost:8080/feed/order/" + params.orderId,
-    //     getRequestData(),
-    //     {
-    //       headers: {
-    //         "Content-Type": "application/x-www-form-urlencoded",
-    //         Accept: "application/json",
-    //         Authorization: `Bearer ${localStorage.getItem("token")}`,
-    //       },
-    //     }
-    //   )
-    //   .then((res) => {
-    //     navigate("/order/" + params.orderId);
-    //   })
-    //   .catch((err) => {
-    //     // alert(err.response.data.message);
-    //     if (err.response.data.message === "jwt expired") {
-    //       alert("身份驗證過期，請重新登入");
-    //       sessionStorage.setItem("beforeLoginUrl", window.location.href);
-    //       navigate("/login");
-    //     }
-    //     // alert(err.message);
-    //   });
   };
 
   return (
@@ -243,6 +221,7 @@ const AddOrder = (props) => {
       <div className="statusRow">
         <span className="rowName">訂單日期</span>
         <MUIDatePicker
+          date={editOrder.date}
           onChange={(dateStr) => {
             // console.log(dateStr);
             dispatch(updateEditOrder({ date: dateStr }));

@@ -11,6 +11,7 @@ import SearchInput from "../ui/SearchInput";
 import Loading from "../ui/Loading";
 import { Config } from "../../util/Constants";
 import { axiosErrorHandler } from "../../util/axiosErrorHandler";
+import DateRangePicker from "../ui/DateRangePicker";
 
 const OrderList = (props) => {
   const order = useSelector((state) => {
@@ -181,6 +182,25 @@ const OrderList = (props) => {
               );
             }}
           />
+          <DateRangePicker
+            handleSearchRange={(startDate, endDate) => {
+              dispatch(
+                fetchOrders({
+                  page: 1,
+                  startDate: startDate,
+                  endDate: endDate,
+                })
+              );
+            }}
+            handleClearSearch={()=>{
+              dispatch(
+                fetchOrders({
+                  page: 1,
+                })
+              );
+              setPage(1)
+            }}
+          />
         </div>
         <div className="tableHeader">
           <span className="column checkbox">
@@ -285,9 +305,12 @@ const OrderListWrap = styled.div`
       0 1px 2px 1px rgba(30, 35, 90, 0.4);
     overflow-y: hidden;
     .functionHeader {
-      padding: 20px 10px 0px 20px;
+      padding: 0px 20px;
       display: flex;
       justify-content: space-between;
+      .search {
+        margin-top: 20px;
+      }
     }
     .tableHeader {
       border-bottom: 2px solid rgba(224, 224, 224, 1);
