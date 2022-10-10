@@ -297,6 +297,7 @@ const OrderListWrap = styled.div`
     display: inline-block;
     background-color: white;
     margin-top: 20px;
+    font-size:18px;
     min-height: 200px;
     max-height: 800px;
     overflow-x: auto;
