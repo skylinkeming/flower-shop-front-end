@@ -192,13 +192,13 @@ const OrderList = (props) => {
                 })
               );
             }}
-            handleClearSearch={()=>{
+            handleClearSearch={() => {
               dispatch(
                 fetchOrders({
                   page: 1,
                 })
               );
-              setPage(1)
+              setPage(1);
             }}
           />
         </div>
@@ -277,6 +277,9 @@ const OrderListWrap = styled.div`
     margin-top: 30px;
     position: relative;
     text-align: left;
+    @media (max-width:767px) {
+      width:375px;
+    }
     .pageTitle {
       display: inline-block;
       font-size: 30px;
@@ -297,7 +300,7 @@ const OrderListWrap = styled.div`
     display: inline-block;
     background-color: white;
     margin-top: 20px;
-    font-size:18px;
+    font-size: 18px;
     min-height: 200px;
     max-height: 800px;
     overflow-x: auto;
@@ -305,10 +308,17 @@ const OrderListWrap = styled.div`
     box-shadow: inset 0 -2px 0 0 #cdcde6, inset 0 0 1px 1px #fff,
       0 1px 2px 1px rgba(30, 35, 90, 0.4);
     overflow-y: hidden;
+    @media (max-width: 767px) {
+      width:375px;
+    }
     .functionHeader {
       padding: 0px 20px;
       display: flex;
       justify-content: space-between;
+      @media (max-width:767px) {
+        display:block;
+        text-align: left;
+      }
       .search {
         margin-top: 20px;
       }
@@ -348,13 +358,19 @@ const OrderListWrap = styled.div`
       box-sizing: border-box;
     }
     .column.date {
-      width: 100px;
+      width: 120px;
       white-space: nowrap;
       box-sizing: border-box;
+      @media (max-width: 767px) {
+        display: none;
+      }
     }
     .column.time {
       width: 50px;
       box-sizing: border-box;
+      @media (max-width: 767px) {
+        display: none;
+      }
     }
     .column.client {
       width: 120px;
@@ -368,14 +384,23 @@ const OrderListWrap = styled.div`
       width: 200px;
       box-sizing: border-box;
       overflow: hidden;
+      @media (max-width: 767px) {
+        display: none;
+      }
     }
     .column.totalPrice {
       width: 80px;
       box-sizing: border-box;
+      @media (max-width: 767px) {
+        display: none;
+      }
     }
     .column.address {
       width: 300px;
       box-sizing: border-box;
+      @media (max-width: 767px) {
+        display: none;
+      }
     }
     .column.isPaid {
       width: 105px;

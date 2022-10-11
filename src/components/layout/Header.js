@@ -68,14 +68,14 @@ const Header = () => {
       )}
       {localStorage.getItem("userName") && (
         <Fragment>
-          <div
+          <span
             className="navItem"
             onClick={() => {
               dispatch(logout());
             }}
           >
             登出
-          </div>
+          </span>
           <span className="loginStatus">{"Hi, " + localStorage.getItem("userName")}</span>
         </Fragment>
       )}
@@ -92,6 +92,11 @@ const HeaderWrap = styled.div`
   font-size: 20px;
   color: white;
   height: 45px;
+  @media (max-width:767px){
+    display:block;
+    height:auto;
+    padding:10px 0px;
+  }
   .navItem {
     margin: 0 20px;
     font-size: 20px;
@@ -99,6 +104,9 @@ const HeaderWrap = styled.div`
     text-decoration: none;
     :visited {
       color: white;
+    }
+    @media (max-width:767px) {
+      margin: 0 15px;
     }
   }
   .navItem.current {
@@ -110,6 +118,9 @@ const HeaderWrap = styled.div`
     white-space: nowrap;
     position: absolute;
     right: 200px;
+    @media (max-width:767px){
+      display:none;
+    }
   }
 `;
 

@@ -140,6 +140,9 @@ const SelectClientWrap = styled.div`
     display: flex;
     align-items: center;
     color: black;
+    @media (max-width:767px){
+      display:block;
+    }
   }
   .header {
     :hover {
@@ -189,6 +192,9 @@ const SelectClientWrap = styled.div`
     .col.address {
       width: 250px;
       max-width: 250px;
+      @media (max-width:767px){
+        display:none;
+      }
     }
   }
   .loadingMore {

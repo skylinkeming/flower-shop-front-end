@@ -41,10 +41,10 @@ const OrderDetail = (props) => {
         navigate("/order");
       })
       .catch((error) => {
-        axiosErrorHandler(error, ()=>{
+        axiosErrorHandler(error, () => {
           sessionStorage.setItem("beforeLoginUrl", window.location.href);
           navigate("/login");
-        })
+        });
       });
   };
 
@@ -180,6 +180,9 @@ const OrderDetailWrap = styled.div`
   box-shadow: inset 0 -2px 0 0 #cdcde6, inset 0 0 1px 1px #fff,
     0 1px 2px 1px rgb(30 35 90 / 40%);
   position: relative;
+  @media (max-width: 767px) {
+    max-width: 375px;
+  }
   .title {
     font-weight: bold;
     border-bottom: 2px solid rgba(224, 224, 224, 1);
@@ -234,9 +237,15 @@ const OrderDetailWrap = styled.div`
       padding-bottom: 10px;
       border-bottom: 1px solid;
       margin-bottom: 5px;
+      @media (max-width: 767px) {
+        display:flex;
+      }
     }
     .productRow {
       margin-bottom: 5px;
+      @media (max-width: 767px) {
+        display:flex;
+      }
       .product {
         width: 150px;
         display: inline-block;
@@ -261,6 +270,13 @@ const OrderDetailWrap = styled.div`
     .productRow.totalPrice {
       padding-top: 10px;
       border-top: 1px solid;
+      @media (max-width: 767px) {
+        display:flex;
+        .price {
+          display:none;
+        }
+      }
+
       .quantity {
         font-weight: bold;
       }

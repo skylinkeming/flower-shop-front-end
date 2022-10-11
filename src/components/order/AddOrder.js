@@ -312,6 +312,9 @@ const AddOrderWrap = styled.div`
   box-shadow: inset 0 -2px 0 0 #cdcde6, inset 0 0 1px 1px #fff,
     0 1px 2px 1px rgb(30 35 90 / 40%);
   position: relative;
+  @media (max-width: 767px) {
+    width: 375px;
+  }
   .title {
     font-weight: bold;
     border-bottom: 2px solid rgba(224, 224, 224, 1);
@@ -328,11 +331,17 @@ const AddOrderWrap = styled.div`
     padding-left: 10px;
     display: flex;
     align-items: flex-start;
+    @media (max-width: 767px) {
+      display: block;
+    }
     label {
       font-weight: bold;
       margin-right: 20px;
       width: 72px;
       display: inline-block;
+      @media (max-width: 767px) {
+        margin-bottom: 10px;
+      }
     }
     .selectClientBtn {
       border-radius: 10px;
@@ -350,6 +359,9 @@ const AddOrderWrap = styled.div`
       width: 400px;
       border: 1px solid gray;
       padding: 5px 10px;
+      @media (max-width:767px){
+        width: calc(100% - 20px);
+      }
     }
     .sameAsClient {
       margin-left: 10px;
@@ -361,12 +373,18 @@ const AddOrderWrap = styled.div`
       width: 400px;
       padding: 5px 10px;
       height: 100px;
+      @media (max-width:767px){
+        width: calc(100% - 20px);
+      }
     }
   }
   .row.clientName {
     margin-bottom: 10px;
     height: 50px;
     align-items: center;
+    @media (max-width: 767px) {
+      height: auto;
+    }
     .clientHead {
       display: flex;
       align-items: center;
@@ -375,6 +393,9 @@ const AddOrderWrap = styled.div`
       border: 1px solid lightgray;
       padding: 0 10px;
       cursor: pointer;
+      @media (max-width: 767px) {
+        margin-bottom:10px;
+      }
       .clientImage {
         width: 30px;
         height: 30px;

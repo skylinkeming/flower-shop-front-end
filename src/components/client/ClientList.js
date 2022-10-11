@@ -81,7 +81,7 @@ const ClientList = (props) => {
           <div
             className="btn"
             onClick={() => {
-              if(selectClients.length){
+              if (selectClients.length) {
                 deleteManyOrders();
                 return;
               }
@@ -217,7 +217,10 @@ const ClientListWrap = styled.div`
     box-shadow: inset 0 -2px 0 0 #cdcde6, inset 0 0 1px 1px #fff,
       0 1px 2px 1px rgba(30, 35, 90, 0.4);
     font-size: 18px;
-    overflow:hidden;
+    overflow: hidden;
+    @media (max-width: 767px) {
+      width: 375px;
+    }
     .functionHeader {
       padding: 20px 0 0 20px;
     }
@@ -268,6 +271,9 @@ const ClientListWrap = styled.div`
     }
     .column.phone {
       width: 110px;
+      @media (max-width: 767px) {
+        display: none;
+      }
     }
     .column.cellPhone {
       width: 130px;
@@ -275,6 +281,9 @@ const ClientListWrap = styled.div`
     .column.address {
       width: 300px;
       justify-content: flex-start;
+      @media (max-width: 767px) {
+        display: none;
+      }
     }
   }
 `;

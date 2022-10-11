@@ -65,6 +65,27 @@ const EditOrderSummaryWrap = styled.div`
   position: relative;
   .showInput {
     margin-bottom: 20px;
+    .inputRow {
+      @media (max-width: 767px) {
+        padding-left:0px;
+      }
+      input {
+        @media (max-width: 767px) {
+          width: 70px;
+          margin-right: 5px;
+        }
+      }
+      input:nth-of-type(1) {
+        @media (max-width: 767px) {
+          width: 70px;
+        }
+      }
+      input:nth-of-type(3) {
+        @media (max-width: 767px) {
+          width: 50px;
+        }
+      }
+    }
     .noItem {
       text-align: center;
     }

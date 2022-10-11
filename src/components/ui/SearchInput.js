@@ -28,7 +28,7 @@ const SearchInput = (props) => {
           }}
         />
         <span
-          className="btn search"
+          className="btn searchBtn"
           onClick={() => {
             if (!searchKey) {
               return;
@@ -57,6 +57,11 @@ const SearchInput = (props) => {
 
 const SearchInputWrap = styled.div`
   margin-bottom: 20px;
+  .search {
+    @media (max-width: 767px) {
+      display: block;
+    }
+  }
   input {
     width: 300px;
     padding: 5px 10px;
@@ -64,15 +69,22 @@ const SearchInputWrap = styled.div`
     margin-right: 10px;
     font-size: 18px;
     border: 1px solid rgba(224, 224, 224, 1);
+    @media (max-width: 767px) {
+      margin-bottom: 10px;
+    }
   }
   span.btn {
     border: 1px solid black;
     padding: 5px 10px;
     cursor: pointer;
+    white-space: nowrap;
   }
-  span.search.btn {
+  span.searchBtn.btn {
     white-space: nowrap;
     margin-right: 5px;
+    @media (max-width: 767px) {
+      margin-top: 10px;
+    }
   }
 `;
 
