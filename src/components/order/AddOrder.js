@@ -307,7 +307,7 @@ const AddOrderWrap = styled.div`
   padding: 20px;
   box-sizing: border-box;
   min-height: 300px;
-  overflow-x: scroll;
+  overflow-x: auto;
   border-radius: 10px;
   box-shadow: inset 0 -2px 0 0 #cdcde6, inset 0 0 1px 1px #fff,
     0 1px 2px 1px rgb(30 35 90 / 40%);

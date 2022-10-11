@@ -142,6 +142,7 @@ const ClientProfileＷrap = styled.div`
   height: 90vh;
   padding-top: 50px;
   padding-bottom: 100px;
+  font-size: 18px;
   .clientMainPage {
     display: flex;
     justify-content: center;

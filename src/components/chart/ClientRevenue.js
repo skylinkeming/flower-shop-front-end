@@ -34,13 +34,6 @@ const ClientRevenue = ({ client }) => {
   );
 
   useEffect(() => {
-    // const response = await axios.get(
-    //     Config.url.API_URL +
-    //       "/orders/monthlyRevenue?startDate" +
-    //       condition.page +
-    //       (condition.searchKey ? "&searchKey=" + condition.searchKey : "")
-    //   );
-    // let startDate = ;
     let yArr = [];
     for (var i = 2022; i <= new Date().getFullYear(); i++) {
       yArr.push(i);
@@ -49,7 +42,7 @@ const ClientRevenue = ({ client }) => {
 
     axios
       .get(
-        `http://localhost:8080/feed/orders/monthlyRevenue?startDate=${startDate}&endDate=${endDate}&clientId=${client._id}`
+        `${Config.url.API_URL}/feed/orders/monthlyRevenue?startDate=${startDate}&endDate=${endDate}&clientId=${client._id}`
       )
       .then((result) => {
         let revenue = result.data.monthlyRevenue;
@@ -57,10 +50,6 @@ const ClientRevenue = ({ client }) => {
         setDataArray(Object.values(revenue));
       });
   }, []);
-
-  const getStartDate = () =>{
-    
-  }
 
   const options = {
     responsive: true,

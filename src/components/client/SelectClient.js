@@ -175,7 +175,7 @@ const SelectClientWrap = styled.div`
       text-overflow: ellipsis;
     }
     .col.checkbox {
-      width: 35px;
+      width: 48px;
       padding: 0 5px;
     }
     .col.name {
