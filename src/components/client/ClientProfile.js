@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import ClientOrderList from "./ClientOrderList";
 import { useNavigate } from "react-router-dom";
-import { updateEditOrder } from "../../features/order/orderSlice";
+import { updateEditOrder, clearEditOrder } from "../../features/order/orderSlice";
 import { Config } from "../../util/Constants";
 import { axiosErrorHandler } from "../../util/axiosErrorHandler";
 import ClientRevenue from "../chart/ClientRevenue";
@@ -73,6 +73,7 @@ const ClientProfile = () => {
             <div
               className="addOrderBtn"
               onClick={() => {
+                dispatch(clearEditOrder());
                 dispatch(updateEditOrder({ client: clientData }));
                 dispatch(updateEditOrder({ clientName: clientData.name }));
                 dispatch(updateEditOrder({ address: clientData.address }));

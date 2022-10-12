@@ -16,7 +16,7 @@ const ClientOrderList = ({ orderList }) => {
     const timeStr =
       dateObj.getHours() +
       ":" +
-      (dateObj.getMinutes() == 0 ? "00" : dateObj.getMinutes());
+      (dateObj.getMinutes() === 0 ? "00" : dateObj.getMinutes());
     return dateStr + " " + timeStr;
   };
 
@@ -45,7 +45,7 @@ const ClientOrderList = ({ orderList }) => {
           {orderList.map((order, idx) => {
             return (
               <div
-                className="orderRow"
+                className="orderRow data"
                 key={idx}
                 onClick={() => {
                   navigate("/order/" + order._id);
@@ -66,8 +66,7 @@ const ClientOrderList = ({ orderList }) => {
 
   return (
     <ClientOrderListWrap>
-      <div className="orderTab">
-      </div>
+      <div className="orderTab"></div>
       <div className="orderRow tableHeader">
         <div className="date">日期</div>
         <div className="products">商品</div>
@@ -109,11 +108,22 @@ const ClientOrderListWrap = styled.div`
     padding: 5px;
     border-bottom: 1px solid rgba(224, 224, 224, 1);
   }
+  .orderRow.data {
+    :hover {
+      background: #f5f6f7;
+    }
+  }
   .date {
-    width: 150px;
+    width: 33%;
+    overflow: hidden;
+    white-space: nowrap;
   }
   .products {
-    width: 300px;
+    width: 33%;
+    text-align: center;
+  }
+  .totalPrice {
+    width: 33%;
     text-align: center;
   }
 `;

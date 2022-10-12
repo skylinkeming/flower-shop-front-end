@@ -6,7 +6,7 @@ import OrderList from "./components/order/OrderList";
 import AddOrEditOrder from "./components/order/AddOrder";
 import OrderDetail from "./components/order/OrderDetail";
 import ClientList from "./components/client/ClientList";
-import ClientProfile from "./components/client/ClientProfile";
+import ClientDetail from "./components/client/ClientDetail";
 import Header from "./components/layout/Header";
 import Login from "./components/auth/Login";
 import SignUp from "./components/auth/SignUp";
@@ -31,7 +31,7 @@ function App() {
           path="/client/edit-client/:clientId"
           element={<AddOrEditClient isEdit={true} />}
         />
-        <Route path="/client/:clientId" element={<ClientProfile />} />
+        <Route path="/client/:clientId" element={<ClientDetail />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
       </Routes>

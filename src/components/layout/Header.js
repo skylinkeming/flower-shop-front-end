@@ -16,7 +16,6 @@ const Header = () => {
 
   //todo: 用url change來改變page
 
-
   const getClassName = (linkName) => {
     // return
     if (linkName === page) {
@@ -57,13 +56,6 @@ const Header = () => {
           >
             登入
           </Link>
-          <Link
-            className={getClassName("sign-up")}
-            to="/signup"
-            onClick={() => setPage("sign-up")}
-          >
-            加入會員
-          </Link>
         </Fragment>
       )}
       {localStorage.getItem("userName") && (
@@ -76,7 +68,9 @@ const Header = () => {
           >
             登出
           </span>
-          <span className="loginStatus">{"Hi, " + localStorage.getItem("userName")}</span>
+          <span className="loginStatus">
+            {"Hi, " + localStorage.getItem("userName")}
+          </span>
         </Fragment>
       )}
       <div className="navItem"></div>
@@ -92,21 +86,26 @@ const HeaderWrap = styled.div`
   font-size: 20px;
   color: white;
   height: 45px;
-  @media (max-width:767px){
-    display:block;
-    height:auto;
-    padding:10px 0px;
+  @media (max-width: 767px) {
+    display: block;
+    height: 60px;
+    padding: 10px 0px;
+    width: 100%;
   }
   .navItem {
     margin: 0 20px;
     font-size: 20px;
     cursor: pointer;
     text-decoration: none;
+    color: white;
     :visited {
       color: white;
     }
-    @media (max-width:767px) {
-      margin: 0 15px;
+    @media (max-width: 767px) {
+      margin: 0;
+      width: 25%;
+      display: inline-block;
+      text-align: center;
     }
   }
   .navItem.current {
@@ -118,8 +117,8 @@ const HeaderWrap = styled.div`
     white-space: nowrap;
     position: absolute;
     right: 200px;
-    @media (max-width:767px){
-      display:none;
+    @media (max-width: 767px) {
+      display: none;
     }
   }
 `;

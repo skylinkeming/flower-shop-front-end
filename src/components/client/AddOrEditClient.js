@@ -260,6 +260,9 @@ const AddClientWrap = styled.div`
     border-radius: 10px;
     box-shadow: inset 0 -2px 0 0 #cdcde6, inset 0 0 1px 1px #fff,
       0 1px 2px 1px rgb(30 35 90 / 40%);
+    @media (max-width: 767px) {
+      width: 375px;
+    }
     .title {
       font-weight: bold;
       border-bottom: 2px solid rgba(224, 224, 224, 1);
@@ -304,6 +307,9 @@ const AddClientWrap = styled.div`
         box-sizing: border-box;
         border: 1px solid gray;
         border-radius: 5px;
+        @media (max-width: 767px) {
+          width: 250px;
+        }
       }
       textarea {
         width: 300px;
@@ -314,6 +320,9 @@ const AddClientWrap = styled.div`
         border: 1px solid gray;
         padding: 10px;
         border-radius: 5px;
+        @media (max-width: 767px) {
+          width: 250px;
+        }
       }
     }
     .row.image {
