@@ -34,11 +34,11 @@ const ClientRevenue = ({ client }) => {
   );
 
   useEffect(() => {
-    let yArr = [];
-    for (var i = 2022; i <= new Date().getFullYear(); i++) {
-      yArr.push(i);
-    }
-    setYearArray(yArr);
+    // let yArr = [];
+    // for (var i = 2022; i <= new Date().getFullYear(); i++) {
+    //   yArr.push(i);
+    // }
+    // setYearArray(yArr);
 
     axios
       .get(
@@ -68,13 +68,14 @@ const ClientRevenue = ({ client }) => {
       },
       title: {
         display: true,
-        text: "年度訂單金額",
       },
     },
     scales: {
         y: { // defining min and max so hiding the dataset does not change scale range
-          min: 0,
-          max: 20000
+          beginAtZero: true
+        },
+        x:{
+          beginAtZero:true
         }
       }
   };

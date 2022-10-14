@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import Checkbox from "@mui/material/Checkbox";
 import { Config } from "../../util/Constants";
+import { highlightText } from "../../util/highlightText";
 
 const ClientItem = (props) => {
   const {
@@ -17,6 +18,7 @@ const ClientItem = (props) => {
     updatedAt,
     _id,
     isSelected,
+    searchKey,
   } = props;
 
   const navigate = useNavigate();
@@ -59,16 +61,33 @@ const ClientItem = (props) => {
         <img
           alt="客戶頭像"
           src={
-            imageUrl
-              ? Config.url.API_URL + imageUrl
-              : "/images/userIcon.png"
+            imageUrl ? Config.url.API_URL + imageUrl : "/images/userIcon.png"
           }
         />
-        {name}
+        <span
+          dangerouslySetInnerHTML={{
+            __html: highlightText(searchKey, name),
+          }}
+        ></span>
       </div>
-      <div className="column phone">{phone}</div>
-      <div className="column cellPhone">{cellPhone}</div>
-      <div className="column address">{address}</div>
+      <div
+        className="column phone"
+        dangerouslySetInnerHTML={{
+          __html: highlightText(searchKey, phone),
+        }}
+      ></div>
+      <div
+        className="column cellPhone"
+        dangerouslySetInnerHTML={{
+          __html: highlightText(searchKey, cellPhone),
+        }}
+      ></div>
+      <div
+        className="column address"
+        dangerouslySetInnerHTML={{
+          __html: highlightText(searchKey, address),
+        }}
+      ></div>
     </ClientItemWrap>
   );
 };

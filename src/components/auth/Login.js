@@ -10,27 +10,31 @@ const Login = (props) => {
   const passwordInput = useRef(null);
   let navigate = useNavigate();
 
-  useEffect(()=>{
-    window.addEventListener('keypress', keyPressEvent)
+  useEffect(() => {
+    window.addEventListener("keypress", keyPressEvent);
 
-    return ()=>{
-      window.removeEventListener('keypress', keyPressEvent)
-    }
-  },[]);
+    return () => {
+      window.removeEventListener("keypress", keyPressEvent);
+    };
+  }, []);
 
-  const keyPressEvent = (e)=>{
-    if (e.key === 'Enter') {
+  const keyPressEvent = (e) => {
+    if (e.key === "Enter") {
       clickLoginBtn();
     }
-  }
+  };
 
   const clickLoginBtn = async () => {
-    if(!emailInput.current.value){
-      alert("請輸入E-mail")
+    if (!emailInput.current.value) {
+      alert("請輸入E-mail");
       return;
     }
-    if(!passwordInput.current.value){
-      alert("請輸入密碼")
+    if (!passwordInput.current.value) {
+      alert("請輸入密碼");
+      return;
+    }
+    if (passwordInput.current.value.length < 6) {
+      alert("密碼需至少6位數");
       return;
     }
     const res = await dispatch(
@@ -40,7 +44,7 @@ const Login = (props) => {
       })
     );
     if (res.payload.status === 200) {
-      localStorage.setItem("userId",res.payload.data.userId);
+      localStorage.setItem("userId", res.payload.data.userId);
       if (sessionStorage.getItem("beforeLoginUrl")) {
         window.location.href = sessionStorage.getItem("beforeLoginUrl");
       } else {

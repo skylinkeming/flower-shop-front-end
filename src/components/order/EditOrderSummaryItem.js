@@ -35,18 +35,30 @@ const EditOrderSummaryItem = (props) => {
       onMouseLeave={() => setShowDeleteBtn(false)}
     >
       <div className={"inputRow"}>
-        <input
-          placeholder="商品名稱"
-          value={product.productName}
+        <select
+          className="productOption"
+          value={product.productId}
           onChange={(e) => {
+            let selectProduct = props.productOptions.filter(
+              (o) => o._id === e.target.value
+            );
             dispatch(
               updateEditOrderProduct({
                 index: props.index,
-                productName: e.target.value,
+                productName: selectProduct[0].productName,
+                productId: selectProduct[0]._id,
               })
             );
           }}
-        />
+        >
+          <option value="" disabled hidden>
+            選擇商品
+          </option>
+          {props.productOptions.map((option) => {
+            return <option value={option._id}>{option.productName}</option>;
+          })}
+        </select>
+
         <input
           placeholder="價錢"
           type="number"
@@ -110,6 +122,15 @@ const EditOrderSummaryItemWrap = styled.div`
     }
     .deleteBtn.show {
       opacity: 1;
+    }
+  }
+  .productOption {
+    width: 120px;
+    height: 37px;
+    border-radius: 5px;
+    margin-right: 5px;
+    @media (max-width: 767px) {
+      width: 80px;
     }
   }
   input,

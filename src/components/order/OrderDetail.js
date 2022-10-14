@@ -69,8 +69,7 @@ const OrderDetail = (props) => {
           <span className="price"></span>
           <span className="quantity">總金額</span>
           <span className="money">
-            {editOrder.totalPrice}
-            <span>元</span>
+            {editOrder.totalPrice + "元"}
           </span>
         </div>
       </div>

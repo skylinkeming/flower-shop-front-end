@@ -51,7 +51,7 @@ const AddOrder = (props) => {
     editOrder.products.forEach((p) => {
       if (!p.productName) {
         isProductOK = false;
-        msg = "請填入商品名稱";
+        msg = "請選擇商品名稱";
         return;
       }
       if (!p.price) {

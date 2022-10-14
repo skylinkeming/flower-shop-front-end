@@ -22,6 +22,7 @@ const OrderList = (props) => {
   const [selectAll, setSelectAll] = useState(false);
   const [selectOrders, setSelectOrders] = useState([]);
   const [batchActionType, setBatchActionType] = useState("");
+  const [searchKey, setSearchKey] = useState("");
   const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
   useEffect(() => {
@@ -173,6 +174,7 @@ const OrderList = (props) => {
                   searchKey: term,
                 })
               );
+              setSearchKey(term)
             }}
             handleClearSearch={() => {
               dispatch(
@@ -180,6 +182,7 @@ const OrderList = (props) => {
                   page: page,
                 })
               );
+              setSearchKey("")
             }}
           />
           <DateRangePicker
@@ -230,6 +233,7 @@ const OrderList = (props) => {
               order.orderList.map((orderData) => (
                 <OrderItem
                   key={orderData.createdAt}
+                  searchKey={searchKey}
                   {...orderData}
                   isSelected={selectOrders.includes(orderData._id)}
                   handleTickCheckbox={(selected) => {
@@ -271,6 +275,9 @@ const OrderListWrap = styled.div`
   background-color: #e7ebf0;
   height: 100%;
   width: 100%;
+  .highlight {
+    color:#1976D2;
+  }
   .pageTop {
     display: inline-block;
     width: 1100px;
@@ -366,7 +373,7 @@ const OrderListWrap = styled.div`
       }
     }
     .column.time {
-      width: 50px;
+      width: 70px;
       box-sizing: border-box;
       @media (max-width: 767px) {
         display: none;

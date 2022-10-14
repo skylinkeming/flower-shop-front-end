@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import Checkbox from "@mui/material/Checkbox";
+import { highlightText } from "../../util/highlightText";
 
 const OrderItem = (props) => {
   const {
@@ -14,6 +15,7 @@ const OrderItem = (props) => {
     address,
     _id,
     isSelected,
+    searchKey,
   } = props;
   const navigate = useNavigate();
   const dateObj = new Date(date);
@@ -35,13 +37,20 @@ const OrderItem = (props) => {
     return (
       <div className="productList">
         {products.map((p, index) => (
-          <span key={index} className="productRow">
-            {p.productName +
-              "(" +
-              p.quantity +
-              ")" +
-              (index !== finalIndex ? "," : "")}
-          </span>
+          <span
+            key={index}
+            className="productRow"
+            dangerouslySetInnerHTML={{
+              __html: highlightText(
+                searchKey,
+                p.productName +
+                  "(" +
+                  p.quantity +
+                  ")" +
+                  (index !== finalIndex ? "," : "")
+              ),
+            }}
+          ></span>
         ))}
       </div>
     );
@@ -70,10 +79,20 @@ const OrderItem = (props) => {
       </span>
       <div className="column date">{dateStr}</div>
       <div className="column time">{timeStr}</div>
-      <div className="column client">{client && client.name}</div>
+      <div
+        className="column client"
+        dangerouslySetInnerHTML={{
+          __html: highlightText(searchKey, client.name),
+        }}
+      ></div>
       <div className="column products">{renderProductList()}</div>
       <div className="column totalPrice">{totalPrice}</div>
-      <div className="column address">{address}</div>
+      <div
+        className="column address"
+        dangerouslySetInnerHTML={{
+          __html: highlightText(searchKey, address),
+        }}
+      ></div>
       <div className="column isPaid">{isPaid ? "已付款" : "未付款"}</div>
       <div className="column shippingStatus">
         {shippingStatus ? "已送達" : "未送"}
@@ -86,7 +105,7 @@ const OrderItem = (props) => {
 
 const OrderItemWrap = styled.div`
   display: flex;
-  background-color:${(props) => (props.isSelected ? "#f5f6f7" : "")};
+  background-color: ${(props) => (props.isSelected ? "#f5f6f7" : "")};
   border-bottom: 1px solid rgba(224, 224, 224, 1);
   align-items: center;
   height: 50px;
@@ -96,6 +115,9 @@ const OrderItemWrap = styled.div`
   }
   .productRow {
     white-space: nowrap;
+    .column.client {
+      margin-left: 10px;
+    }
   }
 `;
 

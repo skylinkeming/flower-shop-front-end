@@ -22,6 +22,7 @@ const ClientList = (props) => {
   const [page, setPage] = useState(1);
   const [selectAll, setSelectAll] = useState(false);
   const [selectClients, setSelectClients] = useState([]);
+  const [searchKey, setSearchKey] = useState("");
   const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
   useEffect(() => {
@@ -96,6 +97,7 @@ const ClientList = (props) => {
             <SearchInput
               placeholder="請輸入客戶名稱.電話.手機或地址"
               handleClickSearch={(term) => {
+                setSearchKey(term)
                 dispatch(
                   fetchClients({
                     page: 1,
@@ -104,6 +106,7 @@ const ClientList = (props) => {
                 );
               }}
               handleClearSearch={() => {
+                setSearchKey("");
                 dispatch(
                   fetchClients({
                     page: page,
@@ -140,6 +143,7 @@ const ClientList = (props) => {
                 client.clientList.map((clientData) => (
                   <ClientItem
                     key={clientData.createdAt}
+                    searchKey={searchKey}
                     {...clientData}
                     isSelected={selectClients.includes(clientData._id)}
                     handleTickCheckbox={(checked) => {
@@ -184,6 +188,9 @@ const ClientListWrap = styled.div`
   background-color: #e7ebf0;
   height: 100%;
   width: 100%;
+  .highlight {
+    color:#1976D2;
+  }
   .pageTop {
     display: flex;
     justify-content: space-between;
@@ -270,13 +277,13 @@ const ClientListWrap = styled.div`
       justify-content: flex-start;
     }
     .column.phone {
-      width: 110px;
+      width: 140px;
       @media (max-width: 767px) {
         display: none;
       }
     }
     .column.cellPhone {
-      width: 130px;
+      width: 140px;
     }
     .column.address {
       width: 300px;

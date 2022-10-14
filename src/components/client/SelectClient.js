@@ -135,13 +135,14 @@ const SelectClient = (props) => {
 };
 
 const SelectClientWrap = styled.div`
+  font-size: 18px;
   .search {
     padding: 5px 10px;
     display: flex;
     align-items: center;
     color: black;
-    @media (max-width:767px){
-      display:block;
+    @media (max-width: 767px) {
+      display: block;
     }
   }
   .header {
@@ -192,8 +193,8 @@ const SelectClientWrap = styled.div`
     .col.address {
       width: 250px;
       max-width: 250px;
-      @media (max-width:767px){
-        display:none;
+      @media (max-width: 767px) {
+        display: none;
       }
     }
   }

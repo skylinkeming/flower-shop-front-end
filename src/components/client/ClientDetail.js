@@ -9,12 +9,14 @@ import {
 } from "../../features/order/orderSlice";
 import ClientOrderList from "./ClientOrderList";
 import ClientRevenue from "../chart/ClientRevenue";
+import { ProductDoughnut } from "../chart/ClientDoughnut";
 import { Config } from "../../util/Constants";
 import styled from "styled-components";
 
 const ClientDetail = (props) => {
   const [clientData, setClientData] = useState("");
   const [mode, setMode] = useState("order");
+  const [productRevenues, setProductRevenues] = useState([]);
   let dispatch = useDispatch();
   let params = useParams();
   const navigate = useNavigate();
@@ -24,6 +26,18 @@ const ClientDetail = (props) => {
       .get(Config.url.API_URL + "/feed/client/" + params.clientId)
       .then((result) => {
         setClientData(result.data.client);
+        let productAndRevenue = {};
+        result.data.client.orders.forEach((order) => {
+          let products = JSON.parse(order.products);
+          products.forEach((p) => {
+            if (!productAndRevenue[p.productName]) {
+              productAndRevenue[p.productName] = p.price * p.quantity;
+            } else {
+              productAndRevenue[p.productName] += p.price * p.quantity;
+            }
+          });
+        });
+        setProductRevenues(productAndRevenue);
       });
   }, []);
 
@@ -56,7 +70,7 @@ const ClientDetail = (props) => {
   };
 
   return (
-    <ClientDetailWrap>
+    <ClientDetailWrap mode={mode}>
       <div className="title">
         <div className="tabDiv">
           <span
@@ -131,7 +145,20 @@ const ClientDetail = (props) => {
           </div>
         </Fragment>
       )}
-      {mode === "chart" && <ClientRevenue client={clientData} />}
+      {mode === "chart" && (
+        <div className="clientChart">
+          <div className="revenue">
+            <div className="chartTitle">年度訂單金額</div>
+            <ClientRevenue client={clientData} />
+          </div>
+          <div className="doughnut">
+            <ProductDoughnut
+              products={Object.keys(productRevenues)}
+              productRevenues={Object.values(productRevenues)}
+            />
+          </div>
+        </div>
+      )}
     </ClientDetailWrap>
   );
 };
@@ -199,6 +226,9 @@ const ClientDetailWrap = styled.div`
     margin-bottom: 20px;
     transition: 0.2s;
     height: 200px;
+    @media (max-width: 767px) {
+      min-height: ${(props) => (props.mode === "chart" ? "0px" : "220px")};
+    }
     .image {
       width: 200px;
       border-radius: 10px;
@@ -238,6 +268,19 @@ const ClientDetailWrap = styled.div`
     box-sizing: border-box;
     .orderRow {
       display: flex;
+    }
+  }
+  .clientChart {
+    text-align: center;
+    .revenue {
+    }
+    .doughnut {
+      margin-top: 20px;
+      width: 500px;
+      display: inline-block;
+      @media (max-width: 767px) {
+        width: 100%;
+      }
     }
   }
 `;

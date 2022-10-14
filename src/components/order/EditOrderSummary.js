@@ -1,17 +1,27 @@
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import EditOrderSummaryItem from "./EditOrderSummaryItem";
+import axios from "axios";
 import { updateEditOrder } from "../../features/order/orderSlice";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { Config } from "../../util/Constants";
 
 const EditOrderSummary = (props) => {
   const editOrder = useSelector((state) => {
     return state.order.editOrder;
   });
   const products = editOrder.products;
+  const [productOptions, setProductOptions] = useState([]);
   const dispatch = useDispatch();
 
   useEffect(() => {
+    axios.get(Config.url.API_URL + "/product/products").then((result) => {
+      setProductOptions(result.data.products);
+      // setOrderData(result.data.order);
+      // debugger;
+      // result.data.order.products = JSON.parse(result.data.order.products);
+      // dispatch(setEditOrder(result.data.order));
+    });
     setTotalPrice();
   }, [products]);
 
@@ -30,7 +40,7 @@ const EditOrderSummary = (props) => {
           className="addBtn"
           onClick={() => {
             const newList = products.slice();
-            newList.push({ productName: "", price: "", quantity: "" });
+            newList.push({ productName: "", price: "", quantity: "", productId:"" });
             dispatch(updateEditOrder({ products: newList }));
           }}
         >
@@ -46,6 +56,7 @@ const EditOrderSummary = (props) => {
             <EditOrderSummaryItem
               key={index}
               index={index}
+              productOptions={productOptions}
               onClickDeleteBtn={() => {
                 let editList = products.slice();
                 editList = editList.filter((p, idx) => idx !== index);
@@ -67,7 +78,7 @@ const EditOrderSummaryWrap = styled.div`
     margin-bottom: 20px;
     .inputRow {
       @media (max-width: 767px) {
-        padding-left:0px;
+        padding-left: 0px;
       }
       input {
         @media (max-width: 767px) {
