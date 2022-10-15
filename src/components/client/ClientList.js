@@ -29,7 +29,7 @@ const ClientList = (props) => {
     dispatch(
       fetchClients({
         page: page,
-        searchKey: sessionStorage.getItem("searchKey"),
+        searchKey: sessionStorage.getItem("clientSearchKey"),
       })
     );
   }, [page]);
@@ -96,6 +96,7 @@ const ClientList = (props) => {
           <div className="functionHeader">
             <SearchInput
               placeholder="請輸入客戶名稱.電話.手機或地址"
+              keepClientSearchKey={true}
               handleClickSearch={(term) => {
                 setSearchKey(term)
                 dispatch(

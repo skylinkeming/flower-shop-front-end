@@ -15,6 +15,7 @@ const OrderItem = (props) => {
     address,
     _id,
     isSelected,
+    clientName,
     searchKey,
   } = props;
   const navigate = useNavigate();
@@ -82,7 +83,7 @@ const OrderItem = (props) => {
       <div
         className="column client"
         dangerouslySetInnerHTML={{
-          __html: highlightText(searchKey, client.name),
+          __html: highlightText(searchKey, clientName),
         }}
       ></div>
       <div className="column products">{renderProductList()}</div>

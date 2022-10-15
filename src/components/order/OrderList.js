@@ -31,7 +31,7 @@ const OrderList = (props) => {
     dispatch(
       fetchOrders({
         page: page,
-        searchKey: sessionStorage.getItem("searchKey"),
+        searchKey: sessionStorage.getItem("orderSearchKey"),
       })
     );
   }, [page]);
@@ -65,7 +65,7 @@ const OrderList = (props) => {
         dispatch(
           fetchOrders({
             page: page,
-            searchKey: sessionStorage.getItem("searchKey"),
+            searchKey: sessionStorage.getItem("orderSearchKey"),
           })
         );
         // navigate("/order/" + params.orderId);
@@ -165,6 +165,7 @@ const OrderList = (props) => {
       <div className="table">
         <div className="functionHeader">
           <SearchInput
+            keepOrderSearchKey={true}
             placeholder="請輸入商品名稱.送貨地址.客戶名稱..."
             handleClickSearch={(term) => {
               setPage(1);
@@ -174,7 +175,7 @@ const OrderList = (props) => {
                   searchKey: term,
                 })
               );
-              setSearchKey(term)
+              setSearchKey(term);
             }}
             handleClearSearch={() => {
               dispatch(
@@ -182,7 +183,7 @@ const OrderList = (props) => {
                   page: page,
                 })
               );
-              setSearchKey("")
+              setSearchKey("");
             }}
           />
           <DateRangePicker
@@ -276,7 +277,7 @@ const OrderListWrap = styled.div`
   height: 100%;
   width: 100%;
   .highlight {
-    color:#1976D2;
+    color: #1976d2;
   }
   .pageTop {
     display: inline-block;
@@ -284,8 +285,8 @@ const OrderListWrap = styled.div`
     margin-top: 30px;
     position: relative;
     text-align: left;
-    @media (max-width:767px) {
-      width:375px;
+    @media (max-width: 767px) {
+      width: 375px;
     }
     .pageTitle {
       display: inline-block;
@@ -316,14 +317,14 @@ const OrderListWrap = styled.div`
       0 1px 2px 1px rgba(30, 35, 90, 0.4);
     overflow-y: hidden;
     @media (max-width: 767px) {
-      width:375px;
+      width: 375px;
     }
     .functionHeader {
       padding: 0px 20px;
       display: flex;
       justify-content: space-between;
-      @media (max-width:767px) {
-        display:block;
+      @media (max-width: 767px) {
+        display: block;
         text-align: left;
       }
       .search {
@@ -391,6 +392,9 @@ const OrderListWrap = styled.div`
       width: 200px;
       box-sizing: border-box;
       overflow: hidden;
+      .productList {
+        white-space: nowrap;
+      }
       @media (max-width: 767px) {
         display: none;
       }

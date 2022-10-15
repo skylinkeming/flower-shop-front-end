@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { DatePicker, Space } from "antd";
-import "antd/dist/antd.css";
+import 'antd/dist/antd.min.css';
 import React, { useState } from "react";
 var moment = require("moment");
 const { RangePicker } = DatePicker;

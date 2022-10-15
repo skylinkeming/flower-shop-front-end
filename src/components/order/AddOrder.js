@@ -69,7 +69,7 @@ const AddOrder = (props) => {
       alert(msg);
       return;
     }
-    if (!editOrder.client._id) {
+    if (!editOrder.client || !editOrder.client._id) {
       alert("請選擇訂購客戶");
       return;
     }
@@ -150,7 +150,7 @@ const AddOrder = (props) => {
       <div className="title">客戶資訊</div>
       <div className="row clientName">
         <label>訂購客戶</label>
-        {editOrder.client._id && (
+        {editOrder.client && editOrder.client._id && (
           <div
             className="clientHead"
             onClick={() => {
@@ -359,7 +359,7 @@ const AddOrderWrap = styled.div`
       width: 400px;
       border: 1px solid gray;
       padding: 5px 10px;
-      @media (max-width:767px){
+      @media (max-width: 767px) {
         width: calc(100% - 20px);
       }
     }
@@ -373,7 +373,7 @@ const AddOrderWrap = styled.div`
       width: 400px;
       padding: 5px 10px;
       height: 100px;
-      @media (max-width:767px){
+      @media (max-width: 767px) {
         width: calc(100% - 20px);
       }
     }
@@ -394,7 +394,7 @@ const AddOrderWrap = styled.div`
       padding: 0 10px;
       cursor: pointer;
       @media (max-width: 767px) {
-        margin-bottom:10px;
+        margin-bottom: 10px;
       }
       .clientImage {
         width: 30px;

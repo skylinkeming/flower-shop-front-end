@@ -88,7 +88,7 @@ const ClientRevenue = ({ client }) => {
       {
         label: `${client.name} - 訂單金額`,
         data: dataArray,
-        backgroundColor: "rgba(53, 162, 235, 0.5)",
+        backgroundColor: "rgba(75, 192, 192, 0.8)",
       },
     ],
   };

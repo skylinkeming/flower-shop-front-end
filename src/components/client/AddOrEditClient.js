@@ -80,7 +80,6 @@ const AddOrEditClient = (props) => {
         navigate("/client/" + params.clientId);
       })
       .catch((err) => {
-        // alert(err.response.data.message);
         axiosErrorHandler(err);
       });
   };
@@ -143,6 +142,24 @@ const AddOrEditClient = (props) => {
           <div className="title">客戶資料</div>
           <div className="middleInfo">
             <div className="leftInfo">
+              <div className="row preview">
+                {previewImage && <img src={previewImage} alt="" />}
+              </div>
+              <div className="row image">
+                <input
+                  type="file"
+                  // value={imageUrl}
+                  onChange={(e) => {
+                    generateBase64FromImage(e.target.files[0]).then((b64) => {
+                      setPreviewImage(b64);
+                    });
+                    setFile(e.target.files[0]);
+                  }}
+                  onBlur={() => {}}
+                />
+              </div>
+            </div>
+            <div className="rightInfo">
               <div className="row">
                 <label>姓名:</label>
                 <input
@@ -170,45 +187,28 @@ const AddOrEditClient = (props) => {
                   }}
                 />
               </div>
+              <div className="row address">
+                <label>地址:</label>
+                <input
+                  value={address}
+                  onChange={(e) => {
+                    setAddress(e.target.value);
+                  }}
+                />
+              </div>
+
+              <div className="row note">
+                <label>備註:</label>
+                <textarea
+                  value={note}
+                  onChange={(e) => {
+                    setNote(e.target.value);
+                  }}
+                />
+              </div>
             </div>
-            <div className="rightInfo"></div>
           </div>
 
-          <div className="row address">
-            <label>地址:</label>
-            <input
-              value={address}
-              onChange={(e) => {
-                setAddress(e.target.value);
-              }}
-            />
-          </div>
-          <div className="row image">
-            <label>照片:</label>
-            <input
-              type="file"
-              // value={imageUrl}
-              onChange={(e) => {
-                generateBase64FromImage(e.target.files[0]).then((b64) => {
-                  setPreviewImage(b64);
-                });
-                setFile(e.target.files[0]);
-              }}
-              onBlur={() => {}}
-            />
-          </div>
-          <div className="row preview">
-            {previewImage && <img src={previewImage} alt="" />}
-          </div>
-          <div className="row note">
-            <label>備註:</label>
-            <textarea
-              value={note}
-              onChange={(e) => {
-                setNote(e.target.value);
-              }}
-            />
-          </div>
           <div className="btnArea">
             <div
               className="btn add"
@@ -255,7 +255,6 @@ const AddClientWrap = styled.div`
     min-height: 300px;
     font-size: 18px;
     background: white;
-    width: 600px;
     box-sizing: border-box;
     border-radius: 10px;
     box-shadow: inset 0 -2px 0 0 #cdcde6, inset 0 0 1px 1px #fff,
@@ -287,6 +286,17 @@ const AddClientWrap = styled.div`
       justify-content: space-between;
       padding: 0 10px;
       box-sizing: border-box;
+      margin-bottom: 20px;
+      @media (max-width: 767px) {
+        display: block;
+      }
+      .leftInfo {
+        margin-right: 20px;
+        @media (max-width:767px) {
+          margin-right: 0px;
+          text-align:center;
+        }
+      }
     }
     .row {
       margin-bottom: 20px;
@@ -325,23 +335,29 @@ const AddClientWrap = styled.div`
         }
       }
     }
-    .row.image {
-      padding-left: 10px;
-    }
     .row.preview {
+      height:280px;
       img {
         width: 180px;
-        margin-left: 80px;
+        margin-left: 60px;
+        @media (max-width: 767px) {
+          margin-left:0;
+        }
+      }
+      @media (max-width: 767px) {
+        display: inline-block;
+        height: 220px;
       }
     }
     .row.note {
       align-items: flex-start;
-      padding-left: 10px;
     }
     .row.address {
-      padding-left: 10px;
       input {
         width: 300px;
+        @media (max-width: 767px) {
+          width: 250px;
+        }
       }
     }
   }

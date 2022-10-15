@@ -275,7 +275,7 @@ const ClientDetailWrap = styled.div`
     .revenue {
     }
     .doughnut {
-      margin-top: 20px;
+      margin-top: 50px;
       width: 500px;
       display: inline-block;
       @media (max-width: 767px) {

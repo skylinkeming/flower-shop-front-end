@@ -8,7 +8,12 @@ const SearchInput = (props) => {
   );
 
   useEffect(() => {
-    sessionStorage.setItem("searchKey", searchKey);
+    if (props.keepOrderSearchKey) {
+      sessionStorage.setItem("orderSearchKey", searchKey);
+    }
+    if (props.keepClientSearchKey) {
+      sessionStorage.setItem("clientSearchKey", searchKey);
+    }
     window.addEventListener("keypress", (e) => {});
   }, [searchKey]);
 
@@ -31,6 +36,7 @@ const SearchInput = (props) => {
           className="btn searchBtn"
           onClick={() => {
             if (!searchKey) {
+              props.handleClearSearch();
               return;
             }
             props.handleClickSearch(searchKey);

@@ -68,9 +68,7 @@ const OrderDetail = (props) => {
           <span className="product"></span>
           <span className="price"></span>
           <span className="quantity">總金額</span>
-          <span className="money">
-            {editOrder.totalPrice + "元"}
-          </span>
+          <span className="money">{editOrder.totalPrice + "元"}</span>
         </div>
       </div>
     );
@@ -103,7 +101,17 @@ const OrderDetail = (props) => {
       </div>
       <div className="title">客戶資訊</div>
       <div className="clientData">
-        {editOrder.client._id && (
+        {!editOrder.client && (
+          <div className="row">
+            <div className="rowName">客戶名稱</div>
+            <div
+              className="rowData clientName"
+            >
+             {editOrder.clientName+"(客戶已刪除)"}
+            </div>
+          </div>
+        )}
+        {editOrder.client && editOrder.client._id && (
           <Fragment>
             <div className="row">
               <div className="rowName">客戶名稱</div>
@@ -121,9 +129,6 @@ const OrderDetail = (props) => {
               <div className="rowData">{editOrder.phone}</div>
             </div>
           </Fragment>
-        )}
-        {editOrder && !editOrder.client && (
-          <div className="addClientBtn">新增客戶資料＋</div>
         )}
         <div className="row">
           <div className="rowName">運送地址</div>
@@ -237,13 +242,13 @@ const OrderDetailWrap = styled.div`
       border-bottom: 1px solid;
       margin-bottom: 5px;
       @media (max-width: 767px) {
-        display:flex;
+        display: flex;
       }
     }
     .productRow {
       margin-bottom: 5px;
       @media (max-width: 767px) {
-        display:flex;
+        display: flex;
       }
       .product {
         width: 150px;
@@ -270,9 +275,9 @@ const OrderDetailWrap = styled.div`
       padding-top: 10px;
       border-top: 1px solid;
       @media (max-width: 767px) {
-        display:flex;
+        display: flex;
         .price {
-          display:none;
+          display: none;
         }
       }
 
