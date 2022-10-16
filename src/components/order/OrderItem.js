@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import Checkbox from "@mui/material/Checkbox";
 import { highlightText } from "../../util/highlightText";
+import { converToDateAndTimeStr } from "../../util/dateHelper";
 
 const OrderItem = (props) => {
   const {
@@ -19,19 +20,9 @@ const OrderItem = (props) => {
     searchKey,
   } = props;
   const navigate = useNavigate();
-  const dateObj = new Date(date);
+  const dateStr = converToDateAndTimeStr(date);
   const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
-  const dateStr =
-    dateObj.getFullYear() +
-    "-" +
-    (dateObj.getMonth() + 1) +
-    "-" +
-    dateObj.getDate();
-  const timeStr =
-    dateObj.getHours() +
-    ":" +
-    (dateObj.getMinutes() === 0 ? "00" : dateObj.getMinutes());
 
   const renderProductList = () => {
     const finalIndex = products.length - 1;
@@ -79,7 +70,6 @@ const OrderItem = (props) => {
         />
       </span>
       <div className="column date">{dateStr}</div>
-      <div className="column time">{timeStr}</div>
       <div
         className="column client"
         dangerouslySetInnerHTML={{

@@ -23,6 +23,11 @@ const OrderList = (props) => {
   const [selectOrders, setSelectOrders] = useState([]);
   const [batchActionType, setBatchActionType] = useState("");
   const [searchKey, setSearchKey] = useState("");
+  const [sortCondition, setSortCondition] = useState({
+    date: -1,
+  });
+  const [dateRange, setDateRanges] = useState([]);
+
   const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
   useEffect(() => {
@@ -31,10 +36,12 @@ const OrderList = (props) => {
     dispatch(
       fetchOrders({
         page: page,
-        searchKey: sessionStorage.getItem("orderSearchKey"),
+        searchKey: searchKey,
+        sortCondition: sortCondition,
+        dateRange:dateRange
       })
     );
-  }, [page]);
+  }, [page, sortCondition]);
 
   useEffect(() => {
     if (selectAll) {
@@ -65,7 +72,9 @@ const OrderList = (props) => {
         dispatch(
           fetchOrders({
             page: page,
-            searchKey: sessionStorage.getItem("orderSearchKey"),
+            searchKey: localStorage.getItem("orderSearchKey"),
+            sortCondtion: sortCondition,
+            dateRange:dateRange
           })
         );
         // navigate("/order/" + params.orderId);
@@ -93,7 +102,9 @@ const OrderList = (props) => {
         dispatch(
           fetchOrders({
             page: page,
-            searchKey: sessionStorage.getItem("searchKey"),
+            searchKey: localStorage.getItem("orderSearchKey"),
+            sortCondtion: sortCondition,
+            dateRange:dateRange
           })
         );
       })
@@ -173,6 +184,8 @@ const OrderList = (props) => {
                 fetchOrders({
                   page: 1,
                   searchKey: term,
+                  sortCondtion: sortCondition,
+                  dateRange:dateRange
                 })
               );
               setSearchKey(term);
@@ -191,10 +204,11 @@ const OrderList = (props) => {
               dispatch(
                 fetchOrders({
                   page: 1,
-                  startDate: startDate,
-                  endDate: endDate,
+                  sortCondtion: sortCondition,
+                  dateRange:[startDate, endDate]
                 })
               );
+              setDateRanges([startDate, endDate])
             }}
             handleClearSearch={() => {
               dispatch(
@@ -203,6 +217,7 @@ const OrderList = (props) => {
                 })
               );
               setPage(1);
+              setDateRanges([])
             }}
           />
         </div>
@@ -216,14 +231,89 @@ const OrderList = (props) => {
               }}
             />
           </span>
-          <div className="column header date">日期</div>
-          <div className="column header time">時間</div>
-          <div className="column header client">客戶名稱</div>
-          <div className="column header products">商品</div>
-          <div className="column header totalPrice">總金額</div>
-          <div className="column header address">送貨地址</div>
-          <div className="column header isPaid">付款狀態</div>
-          <div className="column header shippingStatus">取貨狀態</div>
+          <div
+            className="column header date"
+            onClick={() =>
+              setSortCondition({
+                date: sortCondition.date ? -sortCondition.date : -1,
+              })
+            }
+          >
+            配送日期
+            <img src="/images/sort.png" alt=""/>
+          </div>
+          <div
+            className="column header client"
+            onClick={() =>
+              setSortCondition({
+                clientName: sortCondition.clientName
+                  ? -sortCondition.clientName
+                  : 1,
+              })
+            }
+          >
+            客戶名稱
+            <img src="/images/sort.png" alt=""/>
+          </div>
+          <div
+            className="column header products"
+            onClick={() =>
+              setSortCondition({
+                products: sortCondition.products ? -sortCondition.products : 1,
+              })
+            }
+          >
+            商品名稱
+            <img src="/images/sort.png" alt=""/>
+          </div>
+          <div
+            className="column header totalPrice"
+            onClick={() =>
+              setSortCondition({
+                totalPrice: sortCondition.totalPrice
+                  ? -sortCondition.totalPrice
+                  : 1,
+              })
+            }
+          >
+            總金額
+            <img src="/images/sort.png" alt=""/>
+          </div>
+          <div
+            className="column header address"
+            onClick={() =>
+              setSortCondition({
+                address: sortCondition.address ? -sortCondition.address : 1,
+              })
+            }
+          >
+            送貨地址
+            <img src="/images/sort.png" alt=""/>
+          </div>
+          <div
+            className="column header isPaid"
+            onClick={() =>
+              setSortCondition({
+                isPaid: sortCondition.isPaid ? -sortCondition.isPaid : 1,
+              })
+            }
+          >
+            付款狀態
+            <img src="/images/sort.png" alt=""/>
+          </div>
+          <div
+            className="column header shippingStatus"
+            onClick={() =>
+              setSortCondition({
+                shippingStatus: sortCondition.shippingStatus
+                  ? -sortCondition.shippingStatus
+                  : 1,
+              })
+            }
+          >
+            取貨狀態
+            <img src="/images/sort.png" alt=""/>
+          </div>
           <div className="column"></div>
           <div className="column"></div>
         </div>
@@ -277,7 +367,7 @@ const OrderListWrap = styled.div`
   height: 100%;
   width: 100%;
   .highlight {
-    color: #1976d2;
+    color: #36d7b7;
   }
   .pageTop {
     display: inline-block;
@@ -360,13 +450,20 @@ const OrderListWrap = styled.div`
     }
     .column.header {
       font-size: 18px;
+      display:flex;
+      justify-content:center ;
+      align-items:center ;
+      cursor:pointer;
+      img {
+        width:20px;
+      }
     }
     .column.checkbox {
       width: 45px;
       box-sizing: border-box;
     }
     .column.date {
-      width: 120px;
+      width: 200px;
       white-space: nowrap;
       box-sizing: border-box;
       @media (max-width: 767px) {
@@ -374,7 +471,7 @@ const OrderListWrap = styled.div`
       }
     }
     .column.time {
-      width: 70px;
+      width: 90px;
       box-sizing: border-box;
       @media (max-width: 767px) {
         display: none;
@@ -393,6 +490,8 @@ const OrderListWrap = styled.div`
       box-sizing: border-box;
       overflow: hidden;
       .productList {
+        text-overflow: ellipsis;
+        overflow: hidden;
         white-space: nowrap;
       }
       @media (max-width: 767px) {
@@ -414,7 +513,7 @@ const OrderListWrap = styled.div`
       }
     }
     .column.isPaid {
-      width: 105px;
+      width: 120px;
       box-sizing: border-box;
     }
   }

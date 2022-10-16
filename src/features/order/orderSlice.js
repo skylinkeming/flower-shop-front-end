@@ -34,13 +34,32 @@ export const fetchOrders = createAsyncThunk(
   "client/fetchOrders",
   async (payload, thunkAPI) => {
     try {
-      let queryString= "";
+      let queryString = "";
+      let sortCondition = payload.sortCondition;
 
-      if(payload.searchKey){
-        queryString = "&searchKey=" + payload.searchKey
+      if (sortCondition) {
+        if (sortCondition.address) {
+          queryString += `&addressOrder=${sortCondition.address}`;
+        } else if (sortCondition.products) {
+          queryString += `&productsOrder=${sortCondition.products}`;
+        } else if (sortCondition.clientName) {
+          queryString += `&clientNameOrder=${sortCondition.clientName}`;
+        } else if (sortCondition.totalPrice) {
+          queryString += `&totalPriceOrder=${sortCondition.totalPrice}`;
+        } else if (sortCondition.isPaid) {
+          queryString += `&isPaidOrder=${sortCondition.isPaid}`;
+        } else if (sortCondition.shippingStatus) {
+          queryString += `&shippingStatusOrder=${sortCondition.shippingStatus}`;
+        } else if (sortCondition.date) {
+          queryString += `&dateOrder=${sortCondition.date}`;
+        }
       }
-      if(payload.startDate && payload.endDate){
-        queryString = `&startDate=${payload.startDate}&endDate=${payload.endDate}`
+
+      if (payload.searchKey) {
+        queryString += "&searchKey=" + payload.searchKey;
+      }
+      if (payload.dateRange && payload.dateRange.length>1) {
+        queryString += `&startDate=${payload.dateRange[0]}&endDate=${payload.dateRange[1]}`;
       }
 
       const response = await axios.get(
@@ -52,7 +71,6 @@ export const fetchOrders = createAsyncThunk(
     }
   }
 );
-
 
 export const orderSlice = createSlice({
   name: "order",
@@ -83,7 +101,7 @@ export const orderSlice = createSlice({
         imageUrl: "",
         isPaid: 0,
         shippingStatus: 0,
-        phone:"",
+        phone: "",
         date: "",
         address: "",
         client: {},
@@ -107,7 +125,7 @@ export const orderSlice = createSlice({
       .addCase(fetchOrders.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload.response.data.message;
-        alert(action.payload.response.data.message)
+        alert(action.payload.response.data.message);
       });
   },
 });

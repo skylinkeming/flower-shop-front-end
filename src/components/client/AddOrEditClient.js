@@ -29,7 +29,11 @@ const AddOrEditClient = (props) => {
           setCellPhone(result.data.client.cellPhone);
           setAddress(result.data.client.address);
           setNote(result.data.client.note);
-          setPreviewImage(Config.url.API_URL + result.data.client.imageUrl);
+          setPreviewImage(
+            result.data.client.imageUrl
+              ? Config.url.API_URL + result.data.client.imageUrl
+              : "/images/userIcon.png"
+          );
         })
         .catch((err) => {
           axiosErrorHandler(err);
@@ -292,9 +296,9 @@ const AddClientWrap = styled.div`
       }
       .leftInfo {
         margin-right: 20px;
-        @media (max-width:767px) {
+        @media (max-width: 767px) {
           margin-right: 0px;
-          text-align:center;
+          text-align: center;
         }
       }
     }
@@ -336,12 +340,12 @@ const AddClientWrap = styled.div`
       }
     }
     .row.preview {
-      height:280px;
+      height: 280px;
       img {
         width: 180px;
         margin-left: 60px;
         @media (max-width: 767px) {
-          margin-left:0;
+          margin-left: 0;
         }
       }
       @media (max-width: 767px) {

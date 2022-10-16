@@ -1,5 +1,7 @@
 import { Fragment, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import FadeLoader from "react-spinners/FadeLoader";
+import ScaleLoader from "react-spinners/ScaleLoader";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { axiosErrorHandler } from "../../util/axiosErrorHandler";
@@ -11,17 +13,20 @@ import ClientOrderList from "./ClientOrderList";
 import ClientRevenue from "../chart/ClientRevenue";
 import { ProductDoughnut } from "../chart/ClientDoughnut";
 import { Config } from "../../util/Constants";
+
 import styled from "styled-components";
 
 const ClientDetail = (props) => {
   const [clientData, setClientData] = useState("");
   const [mode, setMode] = useState("order");
   const [productRevenues, setProductRevenues] = useState([]);
+  const [isFetching, setIsFetching] = useState(false);
   let dispatch = useDispatch();
   let params = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
+    setIsFetching(true);
     axios
       .get(Config.url.API_URL + "/feed/client/" + params.clientId)
       .then((result) => {
@@ -38,6 +43,7 @@ const ClientDetail = (props) => {
           });
         });
         setProductRevenues(productAndRevenue);
+        setIsFetching(false);
       });
   }, []);
 
@@ -100,14 +106,17 @@ const ClientDetail = (props) => {
       </div>
       <div className={mode === "chart" ? "clientInfo small" : "clientInfo"}>
         <div className="image">
-          <img
-            alt=""
-            src={
-              clientData.imageUrl
-                ? Config.url.API_URL + clientData.imageUrl
-                : "/images/userIcon.png"
-            }
-          />
+          {isFetching && <FadeLoader color="#36d7b7" />}
+          {!isFetching && (
+            <img
+              alt=""
+              src={
+                clientData.imageUrl
+                  ? Config.url.API_URL + clientData.imageUrl
+                  : "/images/userIcon.png"
+              }
+            />
+          )}
         </div>
         <div className="detail">
           <div className="clientInfoRow">
@@ -140,9 +149,16 @@ const ClientDetail = (props) => {
               新增訂單
             </div>
           </div>
-          <div className="orderList">
-            <ClientOrderList orderList={clientData.orders} />
-          </div>
+          {isFetching && (
+            <div className="loaderDiv">
+              <ScaleLoader color="#36d7b7" />
+            </div>
+          )}
+          {!isFetching && (
+            <div className="orderList">
+              <ClientOrderList orderList={clientData.orders} />
+            </div>
+          )}
         </Fragment>
       )}
       {mode === "chart" && (
@@ -236,6 +252,7 @@ const ClientDetailWrap = styled.div`
       margin-right: 30px;
       display: flex;
       align-items: center;
+      justify-content: center;
       img {
         width: 100%;
       }
@@ -260,6 +277,11 @@ const ClientDetailWrap = styled.div`
       width: 100px;
       height: 100px;
     }
+  }
+  .loaderDiv {
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   .orderList {
     margin-top: -25px;

@@ -1,24 +1,10 @@
 import { Fragment } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import { converToDateAndTimeStr } from "../../util/dateHelper";
 
 const ClientOrderList = ({ orderList }) => {
   let navigate = useNavigate();
-
-  const getDateStr = (date) => {
-    const dateObj = new Date(date);
-    const dateStr =
-      dateObj.getFullYear() +
-      "-" +
-      (dateObj.getMonth() + 1) +
-      "-" +
-      dateObj.getDate();
-    const timeStr =
-      dateObj.getHours() +
-      ":" +
-      (dateObj.getMinutes() === 0 ? "00" : dateObj.getMinutes());
-    return dateStr + " " + timeStr;
-  };
 
   const renderProductList = (order) => {
     const products = JSON.parse(order.products);
@@ -51,7 +37,7 @@ const ClientOrderList = ({ orderList }) => {
                   navigate("/order/" + order._id);
                 }}
               >
-                <div className="date">{getDateStr(order.date)}</div>
+                <div className="date">{converToDateAndTimeStr(order.date)}</div>
                 <div className="products">{renderProductList(order)}</div>
                 <div className="totalPrice">{order.totalPrice}</div>
               </div>

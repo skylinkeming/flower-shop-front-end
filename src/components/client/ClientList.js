@@ -190,7 +190,7 @@ const ClientListWrap = styled.div`
   height: 100%;
   width: 100%;
   .highlight {
-    color:#1976D2;
+    color:#36d7b7;
   }
   .pageTop {
     display: flex;
@@ -287,7 +287,7 @@ const ClientListWrap = styled.div`
       width: 140px;
     }
     .column.address {
-      width: 300px;
+      min-width: 300px;
       justify-content: flex-start;
       @media (max-width: 767px) {
         display: none;

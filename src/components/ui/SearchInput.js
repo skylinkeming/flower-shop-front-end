@@ -3,19 +3,21 @@ import { useState } from "react";
 import styled from "styled-components";
 
 const SearchInput = (props) => {
-  const [searchKey, setSearchKey] = useState(
-    props.saveSearchKey ? sessionStorage.getItem("searchKey") : ""
-  );
+  const [searchKey, setSearchKey] = useState("");
 
   useEffect(() => {
-    if (props.keepOrderSearchKey) {
-      sessionStorage.setItem("orderSearchKey", searchKey);
-    }
-    if (props.keepClientSearchKey) {
-      sessionStorage.setItem("clientSearchKey", searchKey);
-    }
     window.addEventListener("keypress", (e) => {});
   }, [searchKey]);
+
+  // const updateSearchKeyInStorage = (isClear) => {
+  //   console.log("updateSearchKeyInStorage", searchKey)
+  //   if (props.keepOrderSearchKey) {
+  //     localStorage.setItem("orderSearchKey", isClear ? "" : searchKey);
+  //   }
+  //   if (props.keepClientSearchKey) {
+  //     localStorage.setItem("clientSearchKey", isClear ? "" : searchKey);
+  //   }
+  // };
 
   return (
     <SearchInputWrap>
@@ -35,6 +37,7 @@ const SearchInput = (props) => {
         <span
           className="btn searchBtn"
           onClick={() => {
+            // updateSearchKeyInStorage();
             if (!searchKey) {
               props.handleClearSearch();
               return;
@@ -50,6 +53,7 @@ const SearchInput = (props) => {
             if (!searchKey) {
               return;
             }
+            // updateSearchKeyInStorage(true);
             setSearchKey("");
             props.handleClearSearch();
           }}

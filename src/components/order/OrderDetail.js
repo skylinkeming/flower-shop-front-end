@@ -145,7 +145,7 @@ const OrderDetail = (props) => {
       </div>
       <div className="orderStatus">
         <div className="row">
-          <div className="rowName">訂單日期</div>
+          <div className="rowName">配送日期</div>
           <div className="rowData">
             {editOrder && converToDateAndTimeStr(editOrder.date)}
           </div>

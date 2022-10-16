@@ -53,15 +53,6 @@ const ClientRevenue = ({ client }) => {
 
   const options = {
     responsive: true,
-    animations: {
-        tension: {
-          duration: 0,
-          easing: 'easeInSine',
-          from: 0,
-          to: 1,
-          loop: true
-        }
-      },
     plugins: {
       legend: {
         position: "top",
