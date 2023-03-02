@@ -1,8 +1,8 @@
-import { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchOrders } from "../../features/order/orderSlice";
-import { useEffect, useRef } from "react";
+import { useEffect, useState, Suspense } from "react";
 import axios from "axios";
 import Checkbox from "@mui/material/Checkbox";
 import OrderItem from "./OrderItem";
@@ -11,7 +11,8 @@ import SearchInput from "../ui/SearchInput";
 import Loading from "../ui/Loading";
 import { Config } from "../../util/Constants";
 import { axiosErrorHandler } from "../../util/axiosErrorHandler";
-import DateRangePicker from "../ui/DateRangePicker";
+// import DateRangePicker from "../ui/DateRangePicker";
+const DateRangePicker = React.lazy(() => import("../ui/DateRangePicker"));
 
 const OrderList = (props) => {
   const order = useSelector((state) => {
@@ -38,7 +39,7 @@ const OrderList = (props) => {
         page: page,
         searchKey: searchKey,
         sortCondition: sortCondition,
-        dateRange:dateRange
+        dateRange: dateRange,
       })
     );
   }, [page, sortCondition]);
@@ -74,7 +75,7 @@ const OrderList = (props) => {
             page: page,
             searchKey: localStorage.getItem("orderSearchKey"),
             sortCondtion: sortCondition,
-            dateRange:dateRange
+            dateRange: dateRange,
           })
         );
         // navigate("/order/" + params.orderId);
@@ -104,7 +105,7 @@ const OrderList = (props) => {
             page: page,
             searchKey: localStorage.getItem("orderSearchKey"),
             sortCondtion: sortCondition,
-            dateRange:dateRange
+            dateRange: dateRange,
           })
         );
       })
@@ -185,7 +186,7 @@ const OrderList = (props) => {
                   page: 1,
                   searchKey: term,
                   sortCondtion: sortCondition,
-                  dateRange:dateRange
+                  dateRange: dateRange,
                 })
               );
               setSearchKey(term);
@@ -199,27 +200,29 @@ const OrderList = (props) => {
               setSearchKey("");
             }}
           />
-          <DateRangePicker
-            handleSearchRange={(startDate, endDate) => {
-              dispatch(
-                fetchOrders({
-                  page: 1,
-                  sortCondtion: sortCondition,
-                  dateRange:[startDate, endDate]
-                })
-              );
-              setDateRanges([startDate, endDate])
-            }}
-            handleClearSearch={() => {
-              dispatch(
-                fetchOrders({
-                  page: 1,
-                })
-              );
-              setPage(1);
-              setDateRanges([])
-            }}
-          />
+          <Suspense fallback={<div>Loading...</div>}>
+            <DateRangePicker
+              handleSearchRange={(startDate, endDate) => {
+                dispatch(
+                  fetchOrders({
+                    page: 1,
+                    sortCondtion: sortCondition,
+                    dateRange: [startDate, endDate],
+                  })
+                );
+                setDateRanges([startDate, endDate]);
+              }}
+              handleClearSearch={() => {
+                dispatch(
+                  fetchOrders({
+                    page: 1,
+                  })
+                );
+                setPage(1);
+                setDateRanges([]);
+              }}
+            />
+          </Suspense>
         </div>
         <div className="tableHeader">
           <span className="column checkbox">
@@ -240,7 +243,7 @@ const OrderList = (props) => {
             }
           >
             配送日期
-            <img src="/images/sort.png" alt=""/>
+            <img src="/images/sort.png" alt="" />
           </div>
           <div
             className="column header client"
@@ -253,7 +256,7 @@ const OrderList = (props) => {
             }
           >
             客戶名稱
-            <img src="/images/sort.png" alt=""/>
+            <img src="/images/sort.png" alt="" />
           </div>
           <div
             className="column header products"
@@ -264,7 +267,7 @@ const OrderList = (props) => {
             }
           >
             商品名稱
-            <img src="/images/sort.png" alt=""/>
+            <img src="/images/sort.png" alt="" />
           </div>
           <div
             className="column header totalPrice"
@@ -277,7 +280,7 @@ const OrderList = (props) => {
             }
           >
             總金額
-            <img src="/images/sort.png" alt=""/>
+            <img src="/images/sort.png" alt="" />
           </div>
           <div
             className="column header address"
@@ -288,7 +291,7 @@ const OrderList = (props) => {
             }
           >
             送貨地址
-            <img src="/images/sort.png" alt=""/>
+            <img src="/images/sort.png" alt="" />
           </div>
           <div
             className="column header isPaid"
@@ -299,7 +302,7 @@ const OrderList = (props) => {
             }
           >
             付款狀態
-            <img src="/images/sort.png" alt=""/>
+            <img src="/images/sort.png" alt="" />
           </div>
           <div
             className="column header shippingStatus"
@@ -312,7 +315,7 @@ const OrderList = (props) => {
             }
           >
             取貨狀態
-            <img src="/images/sort.png" alt=""/>
+            <img src="/images/sort.png" alt="" />
           </div>
           <div className="column"></div>
           <div className="column"></div>
@@ -450,12 +453,12 @@ const OrderListWrap = styled.div`
     }
     .column.header {
       font-size: 18px;
-      display:flex;
-      justify-content:center ;
-      align-items:center ;
-      cursor:pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
       img {
-        width:20px;
+        width: 20px;
       }
     }
     .column.checkbox {

@@ -1,13 +1,14 @@
-import { useState } from "react";
-import { useEffect } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import axios from "axios";
 import Checkbox from "@mui/material/Checkbox";
-import ScrollDialog from "../ui/ScrollDialog";
+// import ScrollDialog from "../ui/ScrollDialog";
 import styled from "styled-components";
 import SearchInput from "../ui/SearchInput";
 import Loading from "../ui/Loading";
 import { Config } from "../../util/Constants";
 import { axiosErrorHandler } from "../../util/axiosErrorHandler";
+
+const ScrollDialog = React.lazy(() => import("../ui/ScrollDialog"));
 
 const SelectClient = (props) => {
   const [condition, setCondition] = useState({
@@ -55,82 +56,86 @@ const SelectClient = (props) => {
   };
 
   return (
-    <ScrollDialog
-      title={"選擇客戶"}
-      btnText={targetClient._id ? "選擇其他客戶" : "選擇客戶"}
-      handleClickConfirm={() => {
-        if (!targetClient._id) {
-          return;
-        }
-        props.handleConfirmClient(targetClient);
-      }}
-      handleScrollToBottom={(e) => {
-        if (condition.page >= totalPages) {
-          return;
-        }
-        let prevState = { ...condition };
-        setCondition({
-          page: prevState.page + 1,
-          searchKey: prevState.searchKey,
-        });
-      }}
-    >
-      <SelectClientWrap>
-        <SearchInput
-          placeholder="請輸入客戶名稱.電話.手機或地址"
-          handleClickSearch={(term) => {
-            setTargetClient({ _id: "" });
-            setCondition({
-              page: 1,
-              searchKey: term,
-            });
-          }}
-          handleClearSearch={() => {
-            setTargetClient({ _id: "" });
-            setCondition({
-              page: 1,
-              searchKey: "",
-            });
-          }}
-        />
-        <div className="list">
-          <div className="item header">
-            <span className="checkbox col"></span>
-            <span className="name col">客戶名稱</span>
-            <span className="address col">地址</span>
-            <span className="phone col">電話</span>
-          </div>
-          {isLoading && <Loading />}
-          {!isLoading &&
-            clientList.map((clientData, idx) => (
-              <div
-                className={
-                  clientData._id === targetClient._id ? "item selected" : "item"
-                }
-                key={idx}
-                onClick={() => {
-                  if (targetClient._id === clientData._id) {
-                    setTargetClient({ _id: "" });
-                  } else {
-                    setTargetClient(clientData);
+    <Suspense>
+      <ScrollDialog
+        title={"選擇客戶"}
+        btnText={targetClient._id ? "選擇其他客戶" : "選擇客戶"}
+        handleClickConfirm={() => {
+          if (!targetClient._id) {
+            return;
+          }
+          props.handleConfirmClient(targetClient);
+        }}
+        handleScrollToBottom={(e) => {
+          if (condition.page >= totalPages) {
+            return;
+          }
+          let prevState = { ...condition };
+          setCondition({
+            page: prevState.page + 1,
+            searchKey: prevState.searchKey,
+          });
+        }}
+      >
+        <SelectClientWrap>
+          <SearchInput
+            placeholder="請輸入客戶名稱.電話.手機或地址"
+            handleClickSearch={(term) => {
+              setTargetClient({ _id: "" });
+              setCondition({
+                page: 1,
+                searchKey: term,
+              });
+            }}
+            handleClearSearch={() => {
+              setTargetClient({ _id: "" });
+              setCondition({
+                page: 1,
+                searchKey: "",
+              });
+            }}
+          />
+          <div className="list">
+            <div className="item header">
+              <span className="checkbox col"></span>
+              <span className="name col">客戶名稱</span>
+              <span className="address col">地址</span>
+              <span className="phone col">電話</span>
+            </div>
+            {isLoading && <Loading />}
+            {!isLoading &&
+              clientList.map((clientData, idx) => (
+                <div
+                  className={
+                    clientData._id === targetClient._id
+                      ? "item selected"
+                      : "item"
                   }
-                }}
-              >
-                <span className="checkbox col">
-                  <Checkbox
-                    {...label}
-                    checked={clientData._id === targetClient._id}
-                  />
-                </span>
-                <span className="name col">{clientData.name}</span>
-                <span className="address col">{clientData.address}</span>
-                <span className="phone col">{clientData.phone}</span>
-              </div>
-            ))}
-          {isLoadingMore && <div className="loadingMore">讀取中...</div>}
-        </div>
-      </SelectClientWrap>
-    </ScrollDialog>
+                  key={idx}
+                  onClick={() => {
+                    if (targetClient._id === clientData._id) {
+                      setTargetClient({ _id: "" });
+                    } else {
+                      setTargetClient(clientData);
+                    }
+                  }}
+                >
+                  <span className="checkbox col">
+                    <Checkbox
+                      {...label}
+                      checked={clientData._id === targetClient._id}
+                    />
+                  </span>
+                  <span className="name col">{clientData.name}</span>
+                  <span className="address col">{clientData.address}</span>
+                  <span className="phone col">{clientData.phone}</span>
+                </div>
+              ))}
+            {isLoadingMore && <div className="loadingMore">讀取中...</div>}
+          </div>
+        </SelectClientWrap>
+      </ScrollDialog>
+    </Suspense>
   );
 };
 

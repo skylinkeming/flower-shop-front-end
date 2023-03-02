@@ -1,13 +1,13 @@
 import styled from "styled-components";
 import { useParams, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import React, { useEffect, Suspense } from "react";
 import axios from "axios";
-import MUIDatePicker from "../ui/MUIDatePicker";
+// import MUIDatePicker from "../ui/MUIDatePicker";
 import Box from "@mui/material/Box";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
+// import Select from "@mui/material/Select";
 import EditOrderSummary from "./EditOrderSummary";
 import { useState } from "react";
 import SelectClient from "../client/SelectClient";
@@ -19,6 +19,8 @@ import {
 import { Config } from "../../util/Constants";
 import { axiosErrorHandler } from "../../util/axiosErrorHandler";
 import { useLocation } from "react-router-dom";
+const MUIDatePicker = React.lazy(() => import("../ui/MUIDatePicker"));
+const Select = React.lazy(() => import("@mui/material/Select"));
 
 const AddOrder = (props) => {
   const editOrder = useSelector((state) => {
@@ -220,33 +222,37 @@ const AddOrder = (props) => {
       <div className="title">訂單狀態</div>
       <div className="statusRow">
         <span className="rowName">訂單日期</span>
-        <MUIDatePicker
-          date={editOrder.date}
-          onChange={(dateStr) => {
-            // console.log(dateStr);
-            dispatch(updateEditOrder({ date: dateStr }));
-          }}
-        />
+        <Suspense fallback={<div>Loading...</div>}>
+          <MUIDatePicker
+            date={editOrder.date}
+            onChange={(dateStr) => {
+              // console.log(dateStr);
+              dispatch(updateEditOrder({ date: dateStr }));
+            }}
+          />
+        </Suspense>
       </div>
       <div className="statusRow">
         <span className="rowName">運送狀態</span>
         <Box sx={{ minWidth: 120 }}>
           <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">運送狀態</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={editOrder.shippingStatus}
-              label="Age"
-              onChange={(event) => {
-                dispatch(
-                  updateEditOrder({ shippingStatus: event.target.value })
-                );
-              }}
-            >
-              <MenuItem value={0}>未送</MenuItem>
-              <MenuItem value={1}>已送</MenuItem>
-            </Select>
+            <Suspense fallback={<div>Loading...</div>}>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={editOrder.shippingStatus}
+                label="Age"
+                onChange={(event) => {
+                  dispatch(
+                    updateEditOrder({ shippingStatus: event.target.value })
+                  );
+                }}
+              >
+                <MenuItem value={0}>未送</MenuItem>
+                <MenuItem value={1}>已送</MenuItem>
+              </Select>
+            </Suspense>
           </FormControl>
         </Box>
       </div>
@@ -255,18 +261,20 @@ const AddOrder = (props) => {
         <Box sx={{ minWidth: 120 }}>
           <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">付款狀態</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={editOrder.isPaid ? 1 : 0}
-              label="付款狀態"
-              onChange={(event) => {
-                dispatch(updateEditOrder({ isPaid: event.target.value }));
-              }}
-            >
-              <MenuItem value={0}>未付款</MenuItem>
-              <MenuItem value={1}>已付款</MenuItem>
-            </Select>
+            <Suspense fallback={<div>Loading...</div>}>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={editOrder.isPaid ? 1 : 0}
+                label="付款狀態"
+                onChange={(event) => {
+                  dispatch(updateEditOrder({ isPaid: event.target.value }));
+                }}
+              >
+                <MenuItem value={0}>未付款</MenuItem>
+                <MenuItem value={1}>已付款</MenuItem>
+              </Select>
+            </Suspense>
           </FormControl>
         </Box>
       </div>

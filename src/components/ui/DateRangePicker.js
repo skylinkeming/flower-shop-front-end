@@ -5,7 +5,7 @@ import React, { useState } from "react";
 var moment = require("moment");
 const { RangePicker } = DatePicker;
 
-const DateRangePicker = (props) => {
+const DateRangePicker =  (props) => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   return (
