@@ -22,34 +22,26 @@ ChartJS.register(
   Legend
 );
 
-const ClientRevenue = ({ client }) => {
-  //   const [revenue, setRevenue] = useState();
-  let now = new Date();
+const ClientRevenue = ({ client, selectYear }) => {
   const [monthArray, setMonthArray] = useState([]);
   const [dataArray, setDataArray] = useState([]);
   const [yearArray, setYearArray] = useState([]);
-  const [startDate, setStartDate] = useState(now.getFullYear() + "-01-01");
-  const [endDate, setEndDate] = useState(
-    now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate()
-  );
 
   useEffect(() => {
-    // let yArr = [];
-    // for (var i = 2022; i <= new Date().getFullYear(); i++) {
-    //   yArr.push(i);
-    // }
-    // setYearArray(yArr);
-
+    let startDate = selectYear +"-01-01";
+    let endDate = selectYear+"-12-31";
+      
     axios
       .get(
         `${Config.url.API_URL}/feed/orders/monthlyRevenue?startDate=${startDate}&endDate=${endDate}&clientId=${client._id}`
       )
       .then((result) => {
         let revenue = result.data.monthlyRevenue;
+        console.log(revenue);
         setMonthArray(Object.keys(revenue));
         setDataArray(Object.values(revenue));
       });
-  }, []);
+  }, [selectYear]);
 
   const options = {
     responsive: true,
@@ -62,13 +54,14 @@ const ClientRevenue = ({ client }) => {
       },
     },
     scales: {
-        y: { // defining min and max so hiding the dataset does not change scale range
-          beginAtZero: true
-        },
-        x:{
-          beginAtZero:true
-        }
-      }
+      y: {
+        // defining min and max so hiding the dataset does not change scale range
+        beginAtZero: true,
+      },
+      x: {
+        beginAtZero: true,
+      },
+    },
   };
 
   const labels = monthArray;
@@ -88,7 +81,9 @@ const ClientRevenue = ({ client }) => {
     <ClientRevenueWrap>
       <div className="year">
         {yearArray.map((year) => (
-          <span key={year} className="yearLink">{year}</span>
+          <span key={year} className="yearLink">
+            {year}
+          </span>
         ))}
       </div>
       <Bar options={options} data={data} />

@@ -13,7 +13,7 @@ import ClientOrderList from "./ClientOrderList";
 import ClientRevenue from "../chart/ClientRevenue";
 import { ProductDoughnut } from "../chart/ClientDoughnut";
 import { Config } from "../../util/Constants";
-
+import BasicSelect from "../ui/BasicSelect";
 import styled from "styled-components";
 
 const ClientDetail = (props) => {
@@ -21,6 +21,7 @@ const ClientDetail = (props) => {
   const [mode, setMode] = useState("order");
   const [productRevenues, setProductRevenues] = useState([]);
   const [isFetching, setIsFetching] = useState(false);
+  const [selectYear, setSelectYear] = useState("2022");
   let dispatch = useDispatch();
   let params = useParams();
   const navigate = useNavigate();
@@ -165,7 +166,10 @@ const ClientDetail = (props) => {
         <div className="clientChart">
           <div className="revenue">
             <div className="chartTitle">年度訂單金額</div>
-            <ClientRevenue client={clientData} />
+            <div className="selectYear">
+              <BasicSelect value={selectYear} optionMap={{ 2022: "2022", 2023: "2023" }} handleChange={setSelectYear}/>
+            </div>
+            <ClientRevenue client={clientData} selectYear={selectYear}/>
           </div>
           <div className="doughnut">
             <ProductDoughnut
@@ -295,6 +299,7 @@ const ClientDetailWrap = styled.div`
   .clientChart {
     text-align: center;
     .revenue {
+      position:relative;
     }
     .doughnut {
       margin-top: 50px;
@@ -304,6 +309,13 @@ const ClientDetailWrap = styled.div`
         width: 100%;
       }
     }
+  }
+  select {
+    position: absolute;
+    right: 0;
+    top: -5px;
+    font-size: 16px;
+    padding: 5px;
   }
 `;
 
