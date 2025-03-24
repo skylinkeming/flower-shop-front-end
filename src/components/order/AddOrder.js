@@ -22,13 +22,13 @@ import { useLocation } from "react-router-dom";
 const MUIDatePicker = React.lazy(() => import("../ui/MUIDatePicker"));
 const Select = React.lazy(() => import("@mui/material/Select"));
 
-const AddOrder = (props) => {
+const AddOrder = ({ isPopup }) => {
   const editOrder = useSelector((state) => {
     return state.order.editOrder;
   });
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [isEdit, setIsEdit] = useState(false);
+  const [ isEdit, setIsEdit ] = useState(false);
   const location = useLocation();
   const params = useParams();
 
@@ -41,7 +41,7 @@ const AddOrder = (props) => {
     } else {
       setIsEdit(true);
     }
-  }, [location]);
+  }, [ location ]);
 
   const checkInfo = () => {
     let isProductOK = true;
@@ -144,7 +144,7 @@ const AddOrder = (props) => {
   };
 
   return (
-    <AddOrderWrap>
+    <AddOrderWrap isPopup={isPopup}>
       <div className="title">訂購明細</div>
       <div className="orderSummary">
         <EditOrderSummary />
@@ -199,7 +199,7 @@ const AddOrder = (props) => {
           />
         </div>
       </div>
-      <div className="row">
+      <div className="row address">
         <label>運送地址</label>
         <div>
           <input
@@ -210,15 +210,7 @@ const AddOrder = (props) => {
           />
         </div>
       </div>
-      <div className="row">
-        <label>備註</label>
-        <textarea
-          value={editOrder.note}
-          onChange={(event) => {
-            dispatch(updateEditOrder({ note: event.target.value }));
-          }}
-        />
-      </div>
+
       <div className="title">訂單狀態</div>
       <div className="statusRow">
         <span className="rowName">訂單日期</span>
@@ -278,6 +270,15 @@ const AddOrder = (props) => {
           </FormControl>
         </Box>
       </div>
+      <div className="row">
+        <label>備註</label>
+        <textarea
+          value={editOrder.note}
+          onChange={(event) => {
+            dispatch(updateEditOrder({ note: event.target.value }));
+          }}
+        />
+      </div>
       <div className="btnArea">
         <div
           className="confirm btn"
@@ -311,14 +312,14 @@ const AddOrderWrap = styled.div`
   font-size: 18px;
   background: white;
   width: 700px;
-  margin: 50px auto 40px auto;
-  padding: 20px;
+  margin: ${props => props.isPopup ? "0" : "50px auto 40px auto"};
+  // padding: ${props => props.isPopup ? "0" : "20px"};
+  padding:20px;
   box-sizing: border-box;
   min-height: 300px;
   overflow-x: auto;
   border-radius: 10px;
-  box-shadow: inset 0 -2px 0 0 #cdcde6, inset 0 0 1px 1px #fff,
-    0 1px 2px 1px rgb(30 35 90 / 40%);
+  box-shadow: ${props => props.isPopup ? "" : "inset 0 -2px 0 0 #cdcde6, inset 0 0 1px 1px #fff, 0 1px 2px 1px rgb(30 35 90 / 40%)"};
   position: relative;
   @media (max-width: 767px) {
     width: 375px;
@@ -418,6 +419,9 @@ const AddOrderWrap = styled.div`
         }
       }
     }
+  }
+  .row.address {
+    margin-bottom:40px;
   }
   .statusRow {
     padding-left: 10px;
