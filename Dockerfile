@@ -1,9 +1,9 @@
 FROM node:16-alpine as builder
 WORKDIR '/app'
 COPY ./package.json ./
-RUN npm install --legacy-peer-deps
+RUN pnpm install
 COPY . .
-RUN npm run build
+RUN pnpm run build
 
 FROM nginx
 EXPOSE 3000
