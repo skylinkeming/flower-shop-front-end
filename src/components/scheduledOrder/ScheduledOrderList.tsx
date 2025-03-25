@@ -1,28 +1,42 @@
+"use server";
 import styled from "styled-components";
 import ClientOrderItem from "./ClientOrderItem";
 import React from "react";
 import AddOrder from "../order/AddOrder";
 import CustomizedDialogs from "../ui/CustomDialog";
+import { Config } from "../../util/Constants";
+
+async function getScheduledOrders(scheduledOrderId?: string) {
+  const res = await fetch(Config.url.API_URL + "/feed/scheduledOrders", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  return res.json();
+}
 
 export default function ScheduledOrderList() {
   const [showAddOrder, setShowAddOrder] = React.useState(false);
+  const [currentOrder, setCurrentOrder] = React.useState<any>(null);
+  const [hasFetched, setHasFetched] = React.useState(false);
 
-  const data = [
-    { name: "興安宮" },
-    { name: "興安宮" },
-    { name: "興安宮" },
-    { name: "興安宮" },
-    { name: "興安宮" },
-    { name: "興安宮" },
-    { name: "興安宮" },
-  ];
+  if (!hasFetched) {
+    getScheduledOrders().then((data: any) => {
+      console.log(data.orders);
+      setCurrentOrder(data.orders[0]);
+      setHasFetched(true);
+    });
+  }
+
 
   return (
     <StyledScheduledOrderList>
-      <div className="pageTitle">例行訂單</div>
+      <div className="pageTitle">例行訂單（測試中）</div>
       <div className="table">
         <div className="tableHeader">
-          <div>訂單日期：2025/3/23</div>
+          <div>訂單日期：{currentOrder?.date.split("T")[0]}</div>
           <div className="btns">
             <div
               className="editBtn btn"
@@ -40,7 +54,7 @@ export default function ScheduledOrderList() {
         <div className="tableBody">
           <ClientOrderItem isTitle={true} />
           <ClientOrderItem isTitle={true} />
-          {data.map((item, index) => {
+          {currentOrder?.orders.map((item: any, index: number) => {
             return <ClientOrderItem key={index} clientOrderData={item} />;
           })}
         </div>
@@ -48,7 +62,16 @@ export default function ScheduledOrderList() {
       <CustomizedDialogs
         show={showAddOrder}
         onCloseDialog={() => setShowAddOrder(false)}
-        content={<AddOrder isPopup/>}
+        content={
+          <AddOrder
+            isPopup
+            scheduledOrder={currentOrder?._id}
+            onClose={() => {
+              setShowAddOrder(false);
+              setHasFetched(false)
+            }}
+          />
+        }
       />
     </StyledScheduledOrderList>
   );

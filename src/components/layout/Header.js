@@ -7,7 +7,7 @@ import { logout } from "../../features/auth/authSlice";
 const Header = () => {
   const authData = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-  const [page, setPage] = useState("");
+  const [ page, setPage ] = useState("");
 
   //   history.listen((location, action) => {
   //     // location is an object like window.location
@@ -27,11 +27,11 @@ const Header = () => {
   return (
     <HeaderWrap>
       <Link
-        className={getClassName("clients")}
-        to="/client"
-        onClick={() => setPage("clients")}
+        className={getClassName("scheduledOrder")}
+        to="/scheduledOrder"
+        onClick={() => setPage("scheduledOrder")}
       >
-        客戶資料
+        例行訂單
       </Link>
       <Link
         className={getClassName("orders")}
@@ -40,6 +40,14 @@ const Header = () => {
       >
         訂單資料
       </Link>
+      <Link
+        className={getClassName("clients")}
+        to="/client"
+        onClick={() => setPage("clients")}
+      >
+        客戶資料
+      </Link>
+
       <Link
         className={getClassName("add-order")}
         to="/order/add-order"

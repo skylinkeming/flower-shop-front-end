@@ -22,7 +22,7 @@ import { useLocation } from "react-router-dom";
 const MUIDatePicker = React.lazy(() => import("../ui/MUIDatePicker"));
 const Select = React.lazy(() => import("@mui/material/Select"));
 
-const AddOrder = ({ isPopup }) => {
+const AddOrder = ({ isPopup, onClose, scheduledOrder }) => {
   const editOrder = useSelector((state) => {
     return state.order.editOrder;
   });
@@ -33,7 +33,12 @@ const AddOrder = ({ isPopup }) => {
   const params = useParams();
 
   useEffect(() => {
-    if (window.location.href.includes("/add-order")) {
+    if (scheduledOrder)
+      dispatch(updateEditOrder({ scheduledOrder: scheduledOrder }));
+  }, [])
+
+  useEffect(() => {
+    if (window.location.href.includes("/add-order") || scheduledOrder) {
       setIsEdit(false);
       if (editOrder._id && !window.location.href.includes("clientId")) {
         dispatch(clearEditOrder());
@@ -102,6 +107,7 @@ const AddOrder = ({ isPopup }) => {
       phone: editOrder.phone,
       address: editOrder.address,
       clientName: editOrder.client.name,
+      scheduledOrder: editOrder.scheduledOrder
     };
   };
 
@@ -115,7 +121,11 @@ const AddOrder = ({ isPopup }) => {
         },
       })
       .then((res) => {
-        navigate("/order");
+        if (isPopup) {
+          onClose();
+        } else {
+          navigate("/order");
+        }
       })
       .catch((err) => {
         axiosErrorHandler(err);
@@ -134,7 +144,11 @@ const AddOrder = ({ isPopup }) => {
       },
     })
       .then((res) => {
-        navigate("/order/" + params.orderId);
+        if (isPopup) {
+          onClose();
+        } else {
+          navigate("/order/" + params.orderId);
+        }
       })
       .catch((err) => {
         axiosErrorHandler(err, () => {
@@ -145,10 +159,6 @@ const AddOrder = ({ isPopup }) => {
 
   return (
     <AddOrderWrap isPopup={isPopup}>
-      <div className="title">訂購明細</div>
-      <div className="orderSummary">
-        <EditOrderSummary />
-      </div>
       <div className="title">客戶資訊</div>
       <div className="row clientName">
         <label>訂購客戶</label>
@@ -210,7 +220,10 @@ const AddOrder = ({ isPopup }) => {
           />
         </div>
       </div>
-
+      <div className="title">訂購明細</div>
+      <div className="orderSummary">
+        <EditOrderSummary />
+      </div>
       <div className="title">訂單狀態</div>
       <div className="statusRow">
         <span className="rowName">訂單日期</span>
@@ -298,7 +311,11 @@ const AddOrder = ({ isPopup }) => {
         <div
           className="cancel btn"
           onClick={() => {
-            navigate(-1);
+            if (isPopup) {
+              onClose();
+            } else {
+              navigate(-1);
+            }
           }}
         >
           取消

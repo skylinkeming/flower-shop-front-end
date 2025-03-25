@@ -1,5 +1,5 @@
 import "./App.css";
-import React, { Suspense , Fragment, useEffect } from "react";
+import React, { Suspense , useEffect } from "react";
 import styled from "styled-components";
 import { Routes, Route } from "react-router-dom";
 import OrderList from "./components/order/OrderList";
@@ -11,6 +11,9 @@ import Header from "./components/layout/Header";
 import Login from "./components/auth/Login";
 import SignUp from "./components/auth/SignUp";
 import AddOrEditClient from "./components/client/AddOrEditClient";
+import ScheduledOrderList from "./components/scheduledOrder/ScheduledOrderList";
+
+
 const ClientList = React.lazy(()=>import("./components/client/ClientList"));
 
 function App() {
@@ -21,7 +24,9 @@ function App() {
     <MainPageWrap>
       <Header />
       <Routes>
-        <Route path="/" element={<OrderList />} />
+        <Route path="/" element={<ScheduledOrderList />} />
+        <Route path="/calendar" element={<ScheduledOrderList />} />
+        <Route path="/scheduledOrder" element={<ScheduledOrderList />} />
         <Route path="/order" element={<OrderList />} />
         <Route path="/order/add-order" element={<AddOrEditOrder />} />
         <Route path="/order/edit-order/:orderId" element={<AddOrEditOrder />} />

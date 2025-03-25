@@ -25,6 +25,7 @@ const initialState = {
       note: "",
     },
     note: "",
+    scheduledOrder:""
   },
   error: "",
   totalPages: 1,
