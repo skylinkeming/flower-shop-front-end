@@ -12,6 +12,7 @@ export default function ClientOrderItem({
   onClickDetail?: () => void;
   isTitle?: boolean;
 }) {
+
   if (isTitle) {
     return (
       <StyledClientItem>
@@ -22,13 +23,18 @@ export default function ClientOrderItem({
   }
 
   return (
-    <StyledClientItem onClick={() => {}}>
+    <StyledClientItem
+      onClick={() => {
+        onClickDetail()
+      }}
+    >
       <div className="first flex">
         <div>{clientOrderData?.clientName}</div>
       </div>
       <div className="second flex">
         <div className="total">{clientOrderData.totalPrice}</div>
         <Checkbox
+          onClick={e=> e.stopPropagation()}
           {...label}
           // color="success"
           sx={{ "& .MuiSvgIcon-root": { fontSize: 28 } }}

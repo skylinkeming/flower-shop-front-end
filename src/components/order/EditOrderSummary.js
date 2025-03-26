@@ -22,8 +22,11 @@ const EditOrderSummary = (props) => {
       // result.data.order.products = JSON.parse(result.data.order.products);
       // dispatch(setEditOrder(result.data.order));
     });
+  }, []);
+
+  useEffect(()=>{
     setTotalPrice();
-  }, [products]);
+  },[products])
 
   const setTotalPrice = () => {
     let total = 0;

@@ -1,10 +1,14 @@
 "use server";
 import styled from "styled-components";
 import ClientOrderItem from "./ClientOrderItem";
-import React from "react";
+
 import AddOrder from "../order/AddOrder";
 import CustomizedDialogs from "../ui/CustomDialog";
 import { Config } from "../../util/Constants";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { updateEditOrder } from "../../features/order/orderSlice";
+import { useMediaQuery } from "@mui/material";
 
 async function getScheduledOrders(scheduledOrderId?: string) {
   const res = await fetch(Config.url.API_URL + "/feed/scheduledOrders", {
@@ -18,9 +22,14 @@ async function getScheduledOrders(scheduledOrderId?: string) {
 }
 
 export default function ScheduledOrderList() {
-  const [showAddOrder, setShowAddOrder] = React.useState(false);
-  const [currentOrder, setCurrentOrder] = React.useState<any>(null);
-  const [hasFetched, setHasFetched] = React.useState(false);
+  const [showAddOrder, setShowAddOrder] = useState(false);
+  const [currentOrder, setCurrentOrder] = useState<any>(null);
+  const [hasFetched, setHasFetched] = useState(false);
+  const [orderPopupOption, setOrderPopupOption] = useState<"isAdd" | "isEdit">(
+    "isAdd",
+  );
+  const dispatch = useDispatch();
+  const isMobile = useMediaQuery("(max-width:600px)");
 
   if (!hasFetched) {
     getScheduledOrders().then((data: any) => {
@@ -29,7 +38,6 @@ export default function ScheduledOrderList() {
       setHasFetched(true);
     });
   }
-
 
   return (
     <StyledScheduledOrderList>
@@ -42,6 +50,7 @@ export default function ScheduledOrderList() {
               className="editBtn btn"
               onClick={() => {
                 setShowAddOrder(true);
+                setOrderPopupOption("isAdd");
               }}
             >
               ＋新增客戶
@@ -53,9 +62,24 @@ export default function ScheduledOrderList() {
         </div>
         <div className="tableBody">
           <ClientOrderItem isTitle={true} />
-          <ClientOrderItem isTitle={true} />
+          {!isMobile && <ClientOrderItem isTitle={true} />}
           {currentOrder?.orders.map((item: any, index: number) => {
-            return <ClientOrderItem key={index} clientOrderData={item} />;
+            return (
+              <ClientOrderItem
+                key={index}
+                clientOrderData={item}
+                onClickDetail={() => {
+                  setShowAddOrder(true);
+                  setOrderPopupOption("isEdit");
+                  dispatch(
+                    updateEditOrder({
+                      ...item,
+                      products: JSON.parse(item.products),
+                    }),
+                  );
+                }}
+              />
+            );
           })}
         </div>
       </div>
@@ -65,10 +89,11 @@ export default function ScheduledOrderList() {
         content={
           <AddOrder
             isPopup
+            isAdd={orderPopupOption === "isAdd"}
             scheduledOrder={currentOrder?._id}
             onClose={() => {
               setShowAddOrder(false);
-              setHasFetched(false)
+              setHasFetched(false);
             }}
           />
         }
@@ -129,6 +154,19 @@ const StyledScheduledOrderList = styled.div`
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 0px;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .pageTitle {
+      max-width: 100vw;
+    }
+    .table {
+      max-width: 100vw;
+      box-sizing: border-box;
+      .tableBody {
+        display: block;
+      }
     }
   }
 `;

@@ -22,7 +22,7 @@ import { useLocation } from "react-router-dom";
 const MUIDatePicker = React.lazy(() => import("../ui/MUIDatePicker"));
 const Select = React.lazy(() => import("@mui/material/Select"));
 
-const AddOrder = ({ isPopup, onClose, scheduledOrder }) => {
+const AddOrder = ({ isPopup, onClose, scheduledOrder, isAdd }) => {
   const editOrder = useSelector((state) => {
     return state.order.editOrder;
   });
@@ -38,7 +38,7 @@ const AddOrder = ({ isPopup, onClose, scheduledOrder }) => {
   }, [])
 
   useEffect(() => {
-    if (window.location.href.includes("/add-order") || scheduledOrder) {
+    if (window.location.href.includes("/add-order") || isAdd) {
       setIsEdit(false);
       if (editOrder._id && !window.location.href.includes("clientId")) {
         dispatch(clearEditOrder());
@@ -47,6 +47,7 @@ const AddOrder = ({ isPopup, onClose, scheduledOrder }) => {
       setIsEdit(true);
     }
   }, [ location ]);
+
 
   const checkInfo = () => {
     let isProductOK = true;
@@ -162,7 +163,7 @@ const AddOrder = ({ isPopup, onClose, scheduledOrder }) => {
       <div className="title">客戶資訊</div>
       <div className="row clientName">
         <label>訂購客戶</label>
-        {editOrder.client && editOrder.client._id && (
+        {editOrder.client && (
           <div
             className="clientHead"
             onClick={() => {

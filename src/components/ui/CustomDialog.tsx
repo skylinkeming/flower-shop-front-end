@@ -42,7 +42,7 @@ export default function CustomizedDialogs({
         open={show}
         sx={{
           "& .MuiDialog-paper": {
-            width: "80%",
+            width: "auto",
             maxWidth: 700,
           },
           "& .MuiDialogContent-root": {

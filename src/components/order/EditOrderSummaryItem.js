@@ -7,19 +7,17 @@ import {
 } from "../../features/order/orderSlice";
 
 const EditOrderSummaryItem = (props) => {
-  const product = useSelector((state) => {
-    return state.order.editOrder.products[props.index];
-  });
   const products = useSelector((state) => {
     return state.order.editOrder.products;
   });
+  const product = products[ props.index ];
 
   const dispatch = useDispatch();
-  const [showDeleteBtn, setShowDeleteBtn] = useState(false);
+  const [ showDeleteBtn, setShowDeleteBtn ] = useState(false);
 
   useEffect(() => {
     setTotalPrice();
-  }, [product.quantity, product.price]);
+  }, [ product.quantity, product.price ]);
 
   const setTotalPrice = () => {
     let total = 0;
@@ -45,8 +43,8 @@ const EditOrderSummaryItem = (props) => {
             dispatch(
               updateEditOrderProduct({
                 index: props.index,
-                productName: selectProduct[0].productName,
-                productId: selectProduct[0]._id,
+                productName: selectProduct[ 0 ].productName,
+                productId: selectProduct[ 0 ]._id,
               })
             );
           }}
@@ -55,7 +53,7 @@ const EditOrderSummaryItem = (props) => {
             選擇商品
           </option>
           {props.productOptions.map((option) => {
-            return <option value={option._id}>{option.productName}</option>;
+            return <option key={option._id} value={option._id}>{option.productName}</option>;
           })}
         </select>
 
