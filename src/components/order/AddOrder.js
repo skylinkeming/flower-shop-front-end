@@ -340,7 +340,7 @@ const AddOrderWrap = styled.div`
   box-shadow: ${props => props.isPopup ? "" : "inset 0 -2px 0 0 #cdcde6, inset 0 0 1px 1px #fff, 0 1px 2px 1px rgb(30 35 90 / 40%)"};
   position: relative;
   @media (max-width: 767px) {
-    width: 375px;
+    width: 100%;
   }
   .title {
     font-weight: bold;
