@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import { DatePicker, Space } from "antd";
-import 'antd/dist/antd.min.css';
+import "antd/dist/reset.css";
 import React, { useState } from "react";
-var moment = require("moment");
+import dayjs from "dayjs";
+
 const { RangePicker } = DatePicker;
 
 const DateRangePicker =  (props) => {
@@ -12,8 +13,8 @@ const DateRangePicker =  (props) => {
     <DateRangePickerWrap>
       <Space direction="vertical" size={12}>
         <RangePicker
-          defaultValue={moment("2015-01-01", "YYYY-MM-DD")}
-          ranges={[startDate, endDate]}
+          defaultValue={dayjs()}
+          presets={[startDate, endDate]}
           onChange={(momentArr, dateArr) => {
             setStartDate(dateArr[0]);
             setEndDate(dateArr[1]);
