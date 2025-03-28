@@ -9,6 +9,9 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { updateEditOrder } from "../../features/order/orderSlice";
 import { useMediaQuery } from "@mui/material";
+import axios from "axios";
+import { axiosErrorHandler } from "../../util/axiosErrorHandler";
+
 
 async function getScheduledOrders(scheduledOrderId?: string) {
   const res = await fetch(Config.url.API_URL + "/feed/scheduledOrders", {
@@ -25,9 +28,11 @@ export default function ScheduledOrderList() {
   const [showAddOrder, setShowAddOrder] = useState(false);
   const [currentOrder, setCurrentOrder] = useState<any>(null);
   const [hasFetched, setHasFetched] = useState(false);
+  const [editMode, setEditMode] = useState(false);
   const [orderPopupOption, setOrderPopupOption] = useState<"isAdd" | "isEdit">(
     "isAdd",
   );
+  const [selectedList, setSelectedList] = useState<any[]>([]);
   const dispatch = useDispatch();
   const isMobile = useMediaQuery("(max-width:600px)");
 
@@ -38,6 +43,27 @@ export default function ScheduledOrderList() {
       setHasFetched(true);
     });
   }
+  const deleteManyOrders = () => {
+    let requestBody = {
+      idArray: selectedList,
+    };
+    axios
+      .delete(Config.url.API_URL + "/feed/orders/deleteManyOrders", {
+        data: requestBody,
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((res) => {
+        setSelectedList([]);
+        setHasFetched(false);
+      })
+      .catch((err) => {
+        axiosErrorHandler(err);
+      });
+  };
 
   return (
     <StyledScheduledOrderList>
@@ -49,14 +75,26 @@ export default function ScheduledOrderList() {
             <div
               className="editBtn btn"
               onClick={() => {
-                setShowAddOrder(true);
-                setOrderPopupOption("isAdd");
+                if (selectedList.length === 0) {
+                  setShowAddOrder(true);
+                  setOrderPopupOption("isAdd");
+                } else {
+                  deleteManyOrders();
+                }
               }}
             >
-              ＋新增客戶
+              {selectedList.length > 0 ? "刪除客戶訂單" : "＋新增客戶訂單"}
             </div>
-            <div className="deleteBtn btn" onClick={() => {}}>
-              編輯
+            <div
+              className="deleteBtn btn"
+              onClick={() => {
+                if(editMode){
+                  setSelectedList([]);
+                }
+                setEditMode((prevEditMode) => !prevEditMode);
+              }}
+            >
+              {editMode ? "取消" : "編輯"}
             </div>
           </div>
         </div>
@@ -66,6 +104,17 @@ export default function ScheduledOrderList() {
           {currentOrder?.orders.map((item: any, index: number) => {
             return (
               <ClientOrderItem
+                isSelected={selectedList.includes(item._id)}
+                onSelect={() => {
+                  if (selectedList.includes(item._id)) {
+                    setSelectedList((list) =>
+                      list.filter((id) => id !== item._id),
+                    );
+                  } else {
+                    setSelectedList((list) => [...list, item._id]);
+                  }
+                }}
+                isEditMode={editMode}
                 key={index}
                 clientOrderData={item}
                 onClickDetail={() => {

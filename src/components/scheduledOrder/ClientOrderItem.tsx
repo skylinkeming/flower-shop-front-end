@@ -4,13 +4,19 @@ import Checkbox from "@mui/material/Checkbox";
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
 export default function ClientOrderItem({
+  isEditMode=false,
   clientOrderData,
   onClickDetail,
   isTitle,
+  isSelected = false,
+  onSelect = ()=>{},
 }: {
+  isEditMode?: boolean;
   clientOrderData?: any;
   onClickDetail?: () => void;
   isTitle?: boolean;
+  isSelected?: boolean;
+  onSelect?: () => void;
 }) {
 
   if (isTitle) {
@@ -25,20 +31,32 @@ export default function ClientOrderItem({
   return (
     <StyledClientItem
       onClick={() => {
-        onClickDetail()
+        if (isEditMode) return;
+        onClickDetail();
       }}
     >
       <div className="first flex">
+        {isEditMode && (
+          <Checkbox
+            checked={isSelected}
+            onClick={(e) => onSelect()}
+            {...label}
+            // color="success"
+            sx={{ "& .MuiSvgIcon-root": { fontSize: 28 } }}
+          />
+        )}
         <div>{clientOrderData?.clientName}</div>
       </div>
       <div className="second flex">
         <div className="total">{clientOrderData.totalPrice}</div>
-        <Checkbox
-          onClick={e=> e.stopPropagation()}
-          {...label}
-          // color="success"
-          sx={{ "& .MuiSvgIcon-root": { fontSize: 28 } }}
-        />
+        {!isEditMode && (
+          <Checkbox
+            onClick={(e) => e.stopPropagation()}
+            {...label}
+            // color="success"
+            sx={{ "& .MuiSvgIcon-root": { fontSize: 28 } }}
+          />
+        )}
 
         <div className="paidStatus">{clientOrderData.note}</div>
       </div>
