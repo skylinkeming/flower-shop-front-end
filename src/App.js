@@ -11,7 +11,7 @@ import Header from "./components/layout/Header";
 import Login from "./components/auth/Login";
 import SignUp from "./components/auth/SignUp";
 import AddOrEditClient from "./components/client/AddOrEditClient";
-import ScheduledOrderList from "./components/scheduledOrder/ScheduledOrderList";
+import ScheduledOrder from "./components/scheduledOrder/ScheduledOrder";
 
 
 const ClientList = React.lazy(()=>import("./components/client/ClientList"));
@@ -24,9 +24,9 @@ function App() {
     <MainPageWrap>
       <Header />
       <Routes>
-        <Route path="/" element={<ScheduledOrderList />} />
-        <Route path="/calendar" element={<ScheduledOrderList />} />
-        <Route path="/scheduledOrder" element={<ScheduledOrderList />} />
+        <Route path="/" element={<ScheduledOrder />} />
+        <Route path="/calendar" element={<ScheduledOrder />} />
+        <Route path="/scheduledOrder" element={<ScheduledOrder />} />
         <Route path="/order" element={<OrderList />} />
         <Route path="/order/add-order" element={<AddOrEditOrder />} />
         <Route path="/order/edit-order/:orderId" element={<AddOrEditOrder />} />

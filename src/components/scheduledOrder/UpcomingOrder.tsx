@@ -1,48 +1,34 @@
-"use server";
-import styled from "styled-components";
-import ClientOrderItem from "./ClientOrderItem";
-
-import AddOrder from "../order/AddOrder";
-import CustomizedDialogs from "../ui/CustomDialog";
-import { Config } from "../../util/Constants";
-import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { updateEditOrder } from "../../features/order/orderSlice";
-import { useMediaQuery } from "@mui/material";
 import axios from "axios";
+import styled from "styled-components";
+import { Config } from "../../util/Constants";
+import { useDispatch } from "react-redux";
+import { useMediaQuery } from "@mui/material";
+import { useState } from "react";
 import { axiosErrorHandler } from "../../util/axiosErrorHandler";
+import ClientOrderItem from "./ClientOrderItem";
+import { updateEditOrder } from "../../features/order/orderSlice";
+import CustomizedDialogs from "../ui/CustomDialog";
+import AddOrder from "../order/AddOrder";
 
-
-async function getScheduledOrders(scheduledOrderId?: string) {
-  const res = await fetch(Config.url.API_URL + "/feed/scheduledOrders", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-
-  return res.json();
-}
-
-export default function ScheduledOrderList() {
-  const [showAddOrder, setShowAddOrder] = useState(false);
-  const [currentOrder, setCurrentOrder] = useState<any>(null);
-  const [hasFetched, setHasFetched] = useState(false);
+export default function UpcomingOrder({
+  currentOrder,
+  onNeedRefresh,
+}: {
+  currentOrder: any;
+  onNeedRefresh: () => void;
+}) {
   const [editMode, setEditMode] = useState(false);
   const [orderPopupOption, setOrderPopupOption] = useState<"isAdd" | "isEdit">(
     "isAdd",
   );
   const [selectedList, setSelectedList] = useState<any[]>([]);
+  const [showAddOrder, setShowAddOrder] = useState(false);
+
   const dispatch = useDispatch();
   const isMobile = useMediaQuery("(max-width:600px)");
 
-  if (!hasFetched) {
-    getScheduledOrders().then((data: any) => {
-      console.log(data.orders);
-      setCurrentOrder(data.orders[0]);
-      setHasFetched(true);
-    });
-  }
+  console.log({ currentOrder });
+
   const deleteManyOrders = () => {
     let requestBody = {
       idArray: selectedList,
@@ -57,17 +43,17 @@ export default function ScheduledOrderList() {
         },
       })
       .then((res) => {
+        console.log(res);
         setSelectedList([]);
-        setHasFetched(false);
+        // setHasFetched(false);
+        onNeedRefresh();
       })
       .catch((err) => {
         axiosErrorHandler(err);
       });
   };
-
   return (
-    <StyledScheduledOrderList>
-      <div className="pageTitle">例行訂單（測試中）</div>
+    <StyledUpcomingOrder>
       <div className="table">
         <div className="tableHeader">
           <div>訂單日期：{currentOrder?.date.split("T")[0]}</div>
@@ -83,12 +69,12 @@ export default function ScheduledOrderList() {
                 }
               }}
             >
-              {selectedList.length > 0 ? "刪除客戶訂單" : "＋新增客戶訂單"}
+              {selectedList.length > 0 ? "刪除客戶" : "＋新增客戶"}
             </div>
             <div
               className="deleteBtn btn"
               onClick={() => {
-                if(editMode){
+                if (editMode) {
                   setSelectedList([]);
                 }
                 setEditMode((prevEditMode) => !prevEditMode);
@@ -142,25 +128,17 @@ export default function ScheduledOrderList() {
             scheduledOrder={currentOrder?._id}
             onClose={() => {
               setShowAddOrder(false);
-              setHasFetched(false);
+              onNeedRefresh();
+              //   setHasFetched(false);
             }}
           />
         }
       />
-    </StyledScheduledOrderList>
+    </StyledUpcomingOrder>
   );
 }
 
-const StyledScheduledOrderList = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 30px;
-  .pageTitle {
-    display: inline-block;
-    font-size: 30px;
-    width: 1024px;
-  }
+const StyledUpcomingOrder = styled.div`
   .table {
     padding: 20px 20px;
     width: 1024px;
@@ -187,17 +165,6 @@ const StyledScheduledOrderList = styled.div`
         display: flex;
         gap: 10px;
       }
-      .btn {
-        border: 1px solid lightgray;
-        border: 5px 10px;
-        border-radius: 5px;
-        padding: 5px 10px;
-        cursor: pointer;
-        transition: 0.3s;
-        :hover {
-          background-color: #d9fb19;
-        }
-      }
     }
     .tableBody {
       display: grid;
@@ -207,9 +174,6 @@ const StyledScheduledOrderList = styled.div`
   }
 
   @media (max-width: 600px) {
-    .pageTitle {
-      max-width: 100vw;
-    }
     .table {
       max-width: 100vw;
       box-sizing: border-box;

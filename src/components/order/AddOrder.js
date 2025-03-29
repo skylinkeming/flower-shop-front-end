@@ -163,7 +163,7 @@ const AddOrder = ({ isPopup, onClose, scheduledOrder, isAdd }) => {
       <div className="title">客戶資訊</div>
       <div className="row clientName">
         <label>訂購客戶</label>
-        {editOrder.client && (
+        {editOrder.client && editOrder.client._id && (
           <div
             className="clientHead"
             onClick={() => {
