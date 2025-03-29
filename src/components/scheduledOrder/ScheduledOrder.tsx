@@ -30,7 +30,7 @@ export default function ScheduledOrder() {
   if (!hasFetched) {
     getScheduledOrders().then((data: any) => {
       console.log(data.orders);
-      if(currentOrder ==null){
+      if (currentOrder == null) {
         setCurrentOrder(data.orders[0]);
       }
       setOrderList(data.orders);
@@ -51,7 +51,7 @@ export default function ScheduledOrder() {
           +新增例行訂單
         </div>
       </div>
-      <div className="tabs">
+      {/* <div className="tabs">
         <div className="tabContainer">
           <div
             className={
@@ -72,10 +72,10 @@ export default function ScheduledOrder() {
             歷史訂單
           </div>
         </div>
-      </div>
+      </div> */}
       {currentTab === "upcoming order" ? (
         <UpcomingOrder
-          key={currentOrder._id}
+          key={currentOrder?._id}
           currentOrder={currentOrder}
           onNeedRefresh={() => {
             setHasFetched(false);
