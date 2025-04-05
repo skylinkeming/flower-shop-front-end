@@ -31,7 +31,6 @@ const AddOrder = ({ isPopup, onClose, scheduledOrder, isAdd }) => {
   const [ isEdit, setIsEdit ] = useState(false);
   const location = useLocation();
   const params = useParams();
-
   useEffect(() => {
     if (scheduledOrder)
       dispatch(updateEditOrder({ scheduledOrder: scheduledOrder }));
@@ -123,7 +122,7 @@ const AddOrder = ({ isPopup, onClose, scheduledOrder, isAdd }) => {
       })
       .then((res) => {
         if (isPopup) {
-          onClose();
+          onClose(true);
         } else {
           navigate("/order");
         }
@@ -136,7 +135,7 @@ const AddOrder = ({ isPopup, onClose, scheduledOrder, isAdd }) => {
   const updateOrder = () => {
     axios({
       method: "PUT",
-      url: Config.url.API_URL + "/feed/order/" + params.orderId,
+      url: Config.url.API_URL + "/feed/order/" + (params.orderId ? params.orderId : editOrder._id),
       data: getRequestData(),
       headers: {
         "Content-Type": "application/json",
@@ -146,7 +145,7 @@ const AddOrder = ({ isPopup, onClose, scheduledOrder, isAdd }) => {
     })
       .then((res) => {
         if (isPopup) {
-          onClose();
+          onClose(true);
         } else {
           navigate("/order/" + params.orderId);
         }
@@ -160,6 +159,11 @@ const AddOrder = ({ isPopup, onClose, scheduledOrder, isAdd }) => {
 
   return (
     <AddOrderWrap isPopup={isPopup}>
+      {isPopup &&
+        <div className="floatingArea">
+          編輯訂單
+        </div>
+      }
       <div className="title">客戶資訊</div>
       <div className="row clientName">
         <label>訂購客戶</label>
@@ -293,7 +297,7 @@ const AddOrder = ({ isPopup, onClose, scheduledOrder, isAdd }) => {
           }}
         />
       </div>
-      <div className="btnArea">
+      <div className={isPopup ? "btnArea floatingBtnArea" : "btnArea"}>
         <div
           className="confirm btn"
           onClick={() => {
@@ -331,14 +335,12 @@ const AddOrderWrap = styled.div`
   background: white;
   width: 700px;
   margin: ${props => props.isPopup ? "0" : "50px auto 40px auto"};
-  // padding: ${props => props.isPopup ? "0" : "20px"};
-  padding:20px;
+  padding: ${props => props.isPopup ? "70px 20px 100px 20px" : "20px"};
   box-sizing: border-box;
   min-height: 300px;
   overflow-x: auto;
   border-radius: 10px;
   box-shadow: ${props => props.isPopup ? "" : "inset 0 -2px 0 0 #cdcde6, inset 0 0 1px 1px #fff, 0 1px 2px 1px rgb(30 35 90 / 40%)"};
-  position: relative;
   @media (max-width: 767px) {
     width: 100%;
   }
@@ -469,6 +471,31 @@ const AddOrderWrap = styled.div`
       -webkit-transition: 0.3s;
       transition: 0.3s;
     }
+  }
+  .floatingBtnArea {
+    position: absolute;
+    bottom: 0px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    background: white;
+    padding: 10px 0;
+    left:0;
+    filter: drop-shadow(rgb(232, 232, 232) 0px -1px 5px);
+  }
+  .floatingArea {
+    position: absolute;
+    top: 0px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    background: white;
+    padding: 10px 0;
+    left:0;
+    z-index:100;
+    font-size: 20px;
+    font-weight: bold;
+    filter: drop-shadow(rgb(232, 232, 232) 0px 1px 5px);
   }
 `;
 

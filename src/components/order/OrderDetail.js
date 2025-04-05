@@ -14,8 +14,8 @@ const OrderDetail = (props) => {
   });
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const params = useParams();
 
-  let params = useParams();
   useEffect(() => {
     axios
       .get(Config.url.API_URL + "/feed/order/" + params.orderId)

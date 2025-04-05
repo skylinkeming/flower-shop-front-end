@@ -1,9 +1,9 @@
 {
-  "extends": "@tsconfig/node12/tsconfig.json",
   "compilerOptions": {
      "allowJs": true,
     "preserveConstEnums": true,
-     "jsx": "react-jsx"
+     "jsx": "react-jsx",
+     "esModuleInterop": true
   },
   "include": ["src/**/*"],
   "exclude": ["**/*.spec.ts"]

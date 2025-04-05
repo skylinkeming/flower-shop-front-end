@@ -1,11 +1,11 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import {  useDispatch } from "react-redux";
 import { Fragment, useEffect, useState } from "react";
 import { logout } from "../../features/auth/authSlice";
 
 const Header = () => {
-  const authData = useSelector((state) => state.auth);
+  // const authData = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const [ page, setPage ] = useState("");
 
@@ -26,6 +26,13 @@ const Header = () => {
 
   return (
     <HeaderWrap>
+      <Link
+        className={getClassName("calendar")}
+        to="/calendar"
+        onClick={() => setPage("calendar")}
+      >
+        行事曆
+      </Link>
       <Link
         className={getClassName("scheduledOrder")}
         to="/scheduledOrder"

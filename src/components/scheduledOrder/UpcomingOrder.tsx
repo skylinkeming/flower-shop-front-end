@@ -69,7 +69,7 @@ export default function UpcomingOrder({
                 }
               }}
             >
-              {selectedList.length > 0 ? "刪除客戶" : "＋新增客戶"}
+              {selectedList.length > 0 ? "刪除" : "＋新增"}
             </div>
             <div
               className="deleteBtn btn"
