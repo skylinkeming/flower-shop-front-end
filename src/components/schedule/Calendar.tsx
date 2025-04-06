@@ -194,10 +194,15 @@ const StyledLunarCalendar = styled.div`
     padding: 12px 12px;
   }
   .ant-picker-calendar {
-    width: 800px;
+    width: 900px;
     border-radius: 20px;
   }
   .ant-picker-panel {
     border-radius: 20px;
+  }
+  @media (max-width: 768px) {
+    .ant-picker-calendar {
+      width: 100%;
+    }
   }
 `;

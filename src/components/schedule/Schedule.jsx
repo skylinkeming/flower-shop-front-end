@@ -126,4 +126,9 @@ const StyledSchedule = styled.div`
     gap: 10px;
     justify-content: center;
   }
+  @media (max-width:767px){
+    .flex {
+      flex-direction:column;
+    }
+  }
 `;

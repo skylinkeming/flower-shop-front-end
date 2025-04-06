@@ -2,7 +2,6 @@ import styled from "styled-components";
 import { useParams, useNavigate } from "react-router-dom";
 import React, { useEffect, Suspense } from "react";
 import axios from "axios";
-// import MUIDatePicker from "../ui/MUIDatePicker";
 import Box from "@mui/material/Box";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -19,7 +18,10 @@ import {
 import { Config } from "../../util/Constants";
 import { axiosErrorHandler } from "../../util/axiosErrorHandler";
 import { useLocation } from "react-router-dom";
-const MUIDatePicker = React.lazy(() => import("../ui/MUIDatePicker"));
+import CustomizedDialogs from "../ui/CustomDialog";
+import RecurringSetting from "./RecurringSetting";
+import LunarDatePickerPopup from "../lunar/LunarDatePickerPopup";
+import dayjs from "dayjs";
 const Select = React.lazy(() => import("@mui/material/Select"));
 
 const AddOrder = ({ isPopup, onClose, scheduledOrder, isAdd }) => {
@@ -28,13 +30,16 @@ const AddOrder = ({ isPopup, onClose, scheduledOrder, isAdd }) => {
   });
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [ isEdit, setIsEdit ] = useState(false);
   const location = useLocation();
   const params = useParams();
+  const [isEdit, setIsEdit] = useState(false);
+  const [showRecurringSetting, setShowRecurringSetting] = useState(false);
+  const [showDatePicker, setShowDatePicker] = useState(false);
+
   useEffect(() => {
     if (scheduledOrder)
       dispatch(updateEditOrder({ scheduledOrder: scheduledOrder }));
-  }, [])
+  }, []);
 
   useEffect(() => {
     if (window.location.href.includes("/add-order") || isAdd) {
@@ -45,8 +50,7 @@ const AddOrder = ({ isPopup, onClose, scheduledOrder, isAdd }) => {
     } else {
       setIsEdit(true);
     }
-  }, [ location ]);
-
+  }, [location]);
 
   const checkInfo = () => {
     let isProductOK = true;
@@ -107,7 +111,7 @@ const AddOrder = ({ isPopup, onClose, scheduledOrder, isAdd }) => {
       phone: editOrder.phone,
       address: editOrder.address,
       clientName: editOrder.client.name,
-      scheduledOrder: editOrder.scheduledOrder
+      scheduledOrder: editOrder.scheduledOrder,
     };
   };
 
@@ -135,7 +139,10 @@ const AddOrder = ({ isPopup, onClose, scheduledOrder, isAdd }) => {
   const updateOrder = () => {
     axios({
       method: "PUT",
-      url: Config.url.API_URL + "/feed/order/" + (params.orderId ? params.orderId : editOrder._id),
+      url:
+        Config.url.API_URL +
+        "/feed/order/" +
+        (params.orderId ? params.orderId : editOrder._id),
       data: getRequestData(),
       headers: {
         "Content-Type": "application/json",
@@ -159,11 +166,7 @@ const AddOrder = ({ isPopup, onClose, scheduledOrder, isAdd }) => {
 
   return (
     <AddOrderWrap isPopup={isPopup}>
-      {isPopup &&
-        <div className="floatingArea">
-          編輯訂單
-        </div>
-      }
+      {isPopup && <div className="floatingArea">編輯訂單</div>}
       <div className="title">客戶資訊</div>
       <div className="row clientName">
         <label>訂購客戶</label>
@@ -231,16 +234,55 @@ const AddOrder = ({ isPopup, onClose, scheduledOrder, isAdd }) => {
       </div>
       <div className="title">訂單狀態</div>
       <div className="statusRow">
-        <span className="rowName">訂單日期</span>
+        <span
+          className="rowName"
+          onClick={() => {
+            setShowDatePicker(true);
+          }}
+        >
+          訂單日期
+        </span>
         <Suspense fallback={<div>Loading...</div>}>
-          <MUIDatePicker
+          {/* <MUIDatePicker
             date={editOrder.date}
             onChange={(dateStr) => {
               // console.log(dateStr);
               dispatch(updateEditOrder({ date: dateStr }));
             }}
+          /> */}
+          <input
+            className="dateInput"
+            placeholder="請選擇訂單日期"
+            value={new Date(editOrder.date).toLocaleString("zh-TW")}
+            onClick={() => {
+              setShowDatePicker(true);
+            }}
+          />
+          <LunarDatePickerPopup
+            selectDate={editOrder.date}
+            show={showDatePicker}
+            onOk={(date) => {
+              dispatch(
+                updateEditOrder({ date: dayjs(date).format("YYYY-MM-DD HH:mm") }),
+              );
+              setShowDatePicker(false);
+
+            }}
+            onCancel={() => {
+              setShowDatePicker(false);
+            }}
           />
         </Suspense>
+        {/* <div
+          className="setRecurring"
+          onClick={() => {
+            // setShowDatePicker(true);
+
+            setShowRecurringSetting(true);
+          }}
+        >
+          設為例行訂單
+        </div> */}
       </div>
       <div className="statusRow">
         <span className="rowName">運送狀態</span>
@@ -255,7 +297,7 @@ const AddOrder = ({ isPopup, onClose, scheduledOrder, isAdd }) => {
                 label="Age"
                 onChange={(event) => {
                   dispatch(
-                    updateEditOrder({ shippingStatus: event.target.value })
+                    updateEditOrder({ shippingStatus: event.target.value }),
                   );
                 }}
               >
@@ -297,6 +339,15 @@ const AddOrder = ({ isPopup, onClose, scheduledOrder, isAdd }) => {
           }}
         />
       </div>
+      <CustomizedDialogs
+        show={showRecurringSetting}
+        onCloseDialog={() => {
+          setShowRecurringSetting(false);
+        }}
+        content={<RecurringSetting onSelect={() => {}} />}
+      />
+      {/* <LunarDatePickerPopup show={showDatePicker} /> */}
+
       <div className={isPopup ? "btnArea floatingBtnArea" : "btnArea"}>
         <div
           className="confirm btn"
@@ -334,15 +385,25 @@ const AddOrderWrap = styled.div`
   font-size: 18px;
   background: white;
   width: 700px;
-  margin: ${props => props.isPopup ? "0" : "50px auto 40px auto"};
-  padding: ${props => props.isPopup ? "70px 20px 100px 20px" : "20px"};
+  margin: ${(props) => (props.isPopup ? "0" : "50px auto 40px auto")};
+  padding: ${(props) => (props.isPopup ? "70px 20px 100px 20px" : "20px")};
   box-sizing: border-box;
   min-height: 300px;
   overflow-x: auto;
   border-radius: 10px;
-  box-shadow: ${props => props.isPopup ? "" : "inset 0 -2px 0 0 #cdcde6, inset 0 0 1px 1px #fff, 0 1px 2px 1px rgb(30 35 90 / 40%)"};
+  box-shadow: ${(props) =>
+    props.isPopup
+      ? ""
+      : "inset 0 -2px 0 0 #cdcde6, inset 0 0 1px 1px #fff, 0 1px 2px 1px rgb(30 35 90 / 40%)"};
   @media (max-width: 767px) {
     width: 100%;
+  }
+  .dateInput {
+    padding:0 10px;
+    width:auto;
+    height:56px;
+    border: 1px solid lightgray;
+    cursor:pointer;
   }
   .title {
     font-weight: bold;
@@ -353,6 +414,12 @@ const AddOrderWrap = styled.div`
     justify-content: space-between;
     align-items: flex-end;
     display: flex;
+  }
+  .setRecurring {
+    margin-left: 10px;
+    height: 100%;
+    text-decoration: underline;
+    cursor: pointer;
   }
   .row {
     font-size: 18px;
@@ -441,7 +508,7 @@ const AddOrderWrap = styled.div`
     }
   }
   .row.address {
-    margin-bottom:40px;
+    margin-bottom: 40px;
   }
   .statusRow {
     padding-left: 10px;
@@ -480,7 +547,7 @@ const AddOrderWrap = styled.div`
     width: 100%;
     background: white;
     padding: 10px 0;
-    left:0;
+    left: 0;
     filter: drop-shadow(rgb(232, 232, 232) 0px -1px 5px);
   }
   .floatingArea {
@@ -491,8 +558,8 @@ const AddOrderWrap = styled.div`
     width: 100%;
     background: white;
     padding: 10px 0;
-    left:0;
-    z-index:100;
+    left: 0;
+    z-index: 100;
     font-size: 20px;
     font-weight: bold;
     filter: drop-shadow(rgb(232, 232, 232) 0px 1px 5px);
