@@ -41,6 +41,7 @@ export default function CustomizedDialogs({
         aria-labelledby="customized-dialog-title"
         open={show}
         sx={{
+          "zIndex":"20",
           "& .MuiDialog-paper": {
             width: "auto",
             maxWidth: 700,

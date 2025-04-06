@@ -243,13 +243,6 @@ const AddOrder = ({ isPopup, onClose, scheduledOrder, isAdd }) => {
           訂單日期
         </span>
         <Suspense fallback={<div>Loading...</div>}>
-          {/* <MUIDatePicker
-            date={editOrder.date}
-            onChange={(dateStr) => {
-              // console.log(dateStr);
-              dispatch(updateEditOrder({ date: dateStr }));
-            }}
-          /> */}
           <input
             className="dateInput"
             placeholder="請選擇訂單日期"
